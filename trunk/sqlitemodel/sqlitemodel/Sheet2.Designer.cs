@@ -22,9 +22,9 @@ namespace sqlitemodel {
         
         internal Microsoft.Office.Tools.Excel.Controls.Label label1;
         
-        internal Microsoft.Office.Tools.Excel.Controls.ComboBox comboBox1;
+        internal Microsoft.Office.Tools.Excel.Controls.ComboBox cboMapType;
         
-        internal Microsoft.Office.Tools.Excel.Controls.DataGridView dataGridView1;
+        internal Microsoft.Office.Tools.Excel.Controls.DataGridView dgvMapInfoOfCurType;
         
         internal Microsoft.Office.Tools.Excel.Controls.Button btnSaveToDB;
         
@@ -146,8 +146,8 @@ namespace sqlitemodel {
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
         private void InitializeControls() {
             this.label1 = new Microsoft.Office.Tools.Excel.Controls.Label(Globals.Factory, this.ItemProvider, this.HostContext, "1C54A06D51378F14F9919B86157E269FEABDD1", "1C54A06D51378F14F9919B86157E269FEABDD1", this, "label1");
-            this.comboBox1 = new Microsoft.Office.Tools.Excel.Controls.ComboBox(Globals.Factory, this.ItemProvider, this.HostContext, "25D353ED0275E2249FA2BCD32763C5A5D4CC62", "25D353ED0275E2249FA2BCD32763C5A5D4CC62", this, "comboBox1");
-            this.dataGridView1 = new Microsoft.Office.Tools.Excel.Controls.DataGridView(Globals.Factory, this.ItemProvider, this.HostContext, "3476C46BF3B304340293BF9632168E88947C73", "3476C46BF3B304340293BF9632168E88947C73", this, "dataGridView1");
+            this.cboMapType = new Microsoft.Office.Tools.Excel.Controls.ComboBox(Globals.Factory, this.ItemProvider, this.HostContext, "25D353ED0275E2249FA2BCD32763C5A5D4CC62", "25D353ED0275E2249FA2BCD32763C5A5D4CC62", this, "cboMapType");
+            this.dgvMapInfoOfCurType = new Microsoft.Office.Tools.Excel.Controls.DataGridView(Globals.Factory, this.ItemProvider, this.HostContext, "3476C46BF3B304340293BF9632168E88947C73", "3476C46BF3B304340293BF9632168E88947C73", this, "dgvMapInfoOfCurType");
             this.btnSaveToDB = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "410274FE6432E84491B49F7C45173A5C69D1B4", "410274FE6432E84491B49F7C45173A5C69D1B4", this, "btnSaveToDB");
             this.btnGetFromDB = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "58FAA37445CFBD545F55BEA45AACBC1A50ECF5", "58FAA37445CFBD545F55BEA45AACBC1A50ECF5", this, "btnGetFromDB");
         }
@@ -161,7 +161,7 @@ namespace sqlitemodel {
             this.mapoldvalue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.mapvalue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.mapdesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvMapInfoOfCurType)).BeginInit();
             // 
             // label1
             // 
@@ -169,16 +169,16 @@ namespace sqlitemodel {
             this.label1.Text = "映射类型";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // comboBox1
+            // cboMapType
             // 
-            this.comboBox1.Font = new System.Drawing.Font("宋体", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Text = "comboBox1";
+            this.cboMapType.Font = new System.Drawing.Font("宋体", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.cboMapType.Name = "cboMapType";
+            this.cboMapType.Text = "comboBox1";
             // 
-            // dataGridView1
+            // dgvMapInfoOfCurType
             // 
-            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgvMapInfoOfCurType.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.dgvMapInfoOfCurType.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
                         this.mapoldvalue,
                         this.mapvalue,
                         this.mapdesc});
@@ -189,26 +189,10 @@ namespace sqlitemodel {
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowTemplate.Height = 23;
-            this.dataGridView1.Text = "dataGridView1";
-            // 
-            // btnSaveToDB
-            // 
-            this.btnSaveToDB.BackColor = System.Drawing.SystemColors.Control;
-            this.btnSaveToDB.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnSaveToDB.Name = "btnSaveToDB";
-            this.btnSaveToDB.Text = "保存当前值到数据库";
-            this.btnSaveToDB.UseVisualStyleBackColor = false;
-            // 
-            // btnGetFromDB
-            // 
-            this.btnGetFromDB.BackColor = System.Drawing.SystemColors.Control;
-            this.btnGetFromDB.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnGetFromDB.Name = "btnGetFromDB";
-            this.btnGetFromDB.Text = "从数据库获取";
-            this.btnGetFromDB.UseVisualStyleBackColor = false;
+            this.dgvMapInfoOfCurType.DefaultCellStyle = dataGridViewCellStyle1;
+            this.dgvMapInfoOfCurType.Name = "dgvMapInfoOfCurType";
+            this.dgvMapInfoOfCurType.RowTemplate.Height = 23;
+            this.dgvMapInfoOfCurType.Text = "dataGridView1";
             // 
             // mapoldvalue
             // 
@@ -228,12 +212,28 @@ namespace sqlitemodel {
             this.mapdesc.Name = "mapdesc";
             this.mapdesc.Width = 300;
             // 
+            // btnSaveToDB
+            // 
+            this.btnSaveToDB.BackColor = System.Drawing.SystemColors.Control;
+            this.btnSaveToDB.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnSaveToDB.Name = "btnSaveToDB";
+            this.btnSaveToDB.Text = "保存当前值到数据库";
+            this.btnSaveToDB.UseVisualStyleBackColor = false;
+            // 
+            // btnGetFromDB
+            // 
+            this.btnGetFromDB.BackColor = System.Drawing.SystemColors.Control;
+            this.btnGetFromDB.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnGetFromDB.Name = "btnGetFromDB";
+            this.btnGetFromDB.Text = "从数据库获取";
+            this.btnGetFromDB.UseVisualStyleBackColor = false;
+            // 
             // Sheet2
             // 
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvMapInfoOfCurType)).EndInit();
             this.label1.BindingContext = this.BindingContext;
-            this.comboBox1.BindingContext = this.BindingContext;
-            this.dataGridView1.BindingContext = this.BindingContext;
+            this.cboMapType.BindingContext = this.BindingContext;
+            this.dgvMapInfoOfCurType.BindingContext = this.BindingContext;
             this.btnSaveToDB.BindingContext = this.BindingContext;
             this.btnGetFromDB.BindingContext = this.BindingContext;
         }
