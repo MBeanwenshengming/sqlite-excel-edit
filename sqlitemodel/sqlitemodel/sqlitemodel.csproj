@@ -131,6 +131,7 @@
     <Compile Include="Sheet3.Designer.cs">
       <DependentUpon>Sheet3.Designer.xml</DependentUpon>
     </Compile>
+    <Compile Include="sqliteDBHelper\Class1.cs" />
     <Compile Include="ThisWorkbook.cs">
       <DependentUpon>sqlitemodel.xlsx</DependentUpon>
     </Compile>
