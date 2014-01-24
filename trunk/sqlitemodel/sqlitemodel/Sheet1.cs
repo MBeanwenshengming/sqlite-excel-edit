@@ -11,6 +11,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 using Office = Microsoft.Office.Core;
 using System.Data.SQLite;
 using System.IO;
+using sqlitemodel;
 
 namespace sqlitemodel
 {
@@ -44,6 +45,7 @@ namespace sqlitemodel
             this.btnlistMapType.Click += new System.EventHandler(this.btnlistMapType_Click);
             this.btnCreateDB.Click += new System.EventHandler(this.btnCreateDB_Click);
             this.btnstartCreate.Click += new System.EventHandler(this.btnstartCreate_Click);
+            this.btnModifyTable.Click += new System.EventHandler(this.button1_Click);
             this.Startup += new System.EventHandler(this.Sheet1_Startup);
             this.Shutdown += new System.EventHandler(this.Sheet1_Shutdown);
 
@@ -129,6 +131,15 @@ namespace sqlitemodel
                             }
                         }
                     }
+                    if (j == 7)
+                    {
+                        string sValue = (string)this.dgvTableDefine.Rows[i - 1].Cells[j - 1].Value;
+                        if (!isNum(sValue))
+                        {
+                            MessageBox.Show("字段序号必须为数字，无法创建数据表！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            return;
+                        }
+                    }
                 }
             }
             //  检查字段合法性,不能存在重复字段
@@ -143,6 +154,14 @@ namespace sqlitemodel
                         MessageBox.Show("存在重复字段，无法建表", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         return;
                     }
+
+                    svalue = (string)this.dgvTableDefine.Rows[i - 1].Cells[6].Value;
+                    svalue1 = (string)this.dgvTableDefine.Rows[j - 1].Cells[6].Value;
+                    if (svalue == svalue1)
+                    {
+                        MessageBox.Show("存在重复字段序号，无法建表", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
                 }
             }
 
@@ -153,7 +172,7 @@ namespace sqlitemodel
             
             for (int i = 1; i < this.dgvTableDefine.RowCount; ++i)
             {
-                    sInsertIntoTabledefine[i - 1] = "insert into tabledefine (dbtablename, tablename, fieldname, dbfieldname, fielddesc, fieldtype,dbmaptype, iscreateindex) values('" + this.txtTableDBName.Text + "','" + this.txtNewTableName.Text + "'";
+                    sInsertIntoTabledefine[i - 1] = "insert into tabledefine (dbtablename, tablename, fieldname, dbfieldname, fielddesc, fieldtype,dbmaptype, iscreateindex,RecordOrder) values('" + this.txtTableDBName.Text + "','" + this.txtNewTableName.Text + "'";
                    
                     for (int j = 1; j <= this.dgvTableDefine.ColumnCount; ++j)
                     {
@@ -176,8 +195,13 @@ namespace sqlitemodel
                                 }
                             }
                         }
+                        else if (j == 7)
+                        {
+                            string sValue = (string)this.dgvTableDefine.Rows[i - 1].Cells[j - 1].Value;                            
+                            sInsertIntoTabledefine[i - 1] += "," + sValue;
+                        }
                         else
-                        {                    
+                        {
                             string sValue = (string)this.dgvTableDefine.Rows[i - 1].Cells[j - 1].Value;
                             if (sValue == null)
                             {
@@ -192,22 +216,25 @@ namespace sqlitemodel
                     sInsertIntoTabledefine[i - 1] += ")";                    
              }
 
-            sCreateTableInDB = "create table " + this.txtTableDBName.Text + "(";
+            sCreateTableInDB = "create table " + this.txtTableDBName.Text + "(RecordOrder int PRIMARY KEY";
             for (int i = 1; i < this.dgvTableDefine.Rows.Count; ++i)
             {
-                if (i == 1)
-                {
-                    sCreateTableInDB += (string)this.dgvTableDefine.Rows[i - 1].Cells[1].Value + " " + (string)this.dgvTableDefine.Rows[i - 1].Cells[3].Value + " not null";
-                }
-                else
-                {
+                //if (i == 1)
+                //{
+                //    sCreateTableInDB += (string)this.dgvTableDefine.Rows[i - 1].Cells[1].Value + " " + (string)this.dgvTableDefine.Rows[i - 1].Cells[3].Value + " not null";
+                //}
+                //else
+                //{
                     sCreateTableInDB += "," + (string)this.dgvTableDefine.Rows[i - 1].Cells[1].Value + " " + (string)this.dgvTableDefine.Rows[i - 1].Cells[3].Value + " not null";
-                }
-                if (this.dgvTableDefine.Rows[i - 1].Cells[5].Value != null)     //  需要创建索引，那么创建
+                //}
+                if (this.dgvTableDefine.Rows[i - 1].Cells[5].Value != null )     //  需要创建索引，那么创建
                 {
-                    sCreateIndexOnTable[i - 1] = "create index " + this.txtTableDBName.Text + "_" + (string)this.dgvTableDefine.Rows[i - 1].Cells[1].Value + " on " + this.txtTableDBName.Text + "(" + (string)this.dgvTableDefine.Rows[i - 1].Cells[1].Value + ")";
+                    if ((bool)this.dgvTableDefine.Rows[i - 1].Cells[5].Value == true)
+                    {
+                        sCreateIndexOnTable[i - 1] = "create index " + this.txtTableDBName.Text + "_" + (string)this.dgvTableDefine.Rows[i - 1].Cells[1].Value + " on " + this.txtTableDBName.Text + "(" + (string)this.dgvTableDefine.Rows[i - 1].Cells[1].Value + ")";
+                    }
                 }
-            }
+            }            
             sCreateTableInDB += ")";
 
 
@@ -254,6 +281,17 @@ namespace sqlitemodel
             for (int m = 0; m < sValue.Length; ++m)
             {
                 if (sValue[m] < 'a' || sValue[m] > 'z')
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        private bool isNum(string sValue)
+        {
+            for (int m = 0; m < sValue.Length; ++m)
+            {
+                if (sValue[m] < '1' || sValue[m] > '7')
                 {
                     return false;
                 }
@@ -333,42 +371,7 @@ namespace sqlitemodel
                 }
             } 
         }
-        /*
-         * 连接数据库的代码
-         */
-        public void BindData()
-        {
-            // 创建连接数据库
-            String connectionString = @"Data Source=D:\Dev\All-Totorial\SQLites\OrderWater.db;Version=3;";
-            String sql = @"select * from All_Customer Where   (1=1)   order by LastUpdated DESC LIMIT 0,20";
-            connection = new SQLiteConnection(connectionString);
-            //SQLiteCommand cmd = new SQLiteCommand(sql, connection);
-            connection.Open();
-            ds = new DataSet();
-            adpater = new SQLiteDataAdapter(sql, connectionString);
-            adpater.Fill(ds);
 
-            // Create a list object.
-            Microsoft.Office.Tools.Excel.ListObject list1 =
-                this.Controls.AddListObject(
-                this.Range["A1", missing], "Customers");
-
-            System.Diagnostics.Trace.WriteLine("{1}", ds.Tables.Count.ToString());
-            // Bind the list object to the Customers table.
-            list1.AutoSetDataBoundColumnHeaders = true;
-            list1.DataSource = ds.Tables[0];
-
-            foreach (DataTable tb in ds.Tables)
-            {
-                System.Diagnostics.Debug.WriteLine(tb.ToString());
-                System.Diagnostics.Debug.WriteLine(tb.TableName);
-                foreach (DataColumn col in tb.Columns)
-                {
-                    System.Diagnostics.Debug.WriteLine(col.ColumnName);
-                }
-            }
-            //list1.DataMember = "All_Customer";
-        }
 
         private void btnCreateDB_Click(object sender, EventArgs e)
         {
@@ -408,13 +411,13 @@ namespace sqlitemodel
                     sqlCon.Open();                   
                     
                     SQLiteCommand sqliteConmand = sqlCon.CreateCommand();
-                    sqliteConmand.CommandText = "create table tabledefine(dbtablename varchar(30) not null, tablename varchar(30) not null, fieldname varchar(100), fielddesc varchar(100), fieldtype varchar(30), dbfieldname varchar(30)  not null, dbmaptype varchar(50), iscreateindex int default(0))";
+                    sqliteConmand.CommandText = "create table tabledefine(dbtablename varchar(30) not null, tablename varchar(30) not null, fieldname varchar(100), fielddesc varchar(100), fieldtype varchar(30), dbfieldname varchar(30)  not null, dbmaptype varchar(50), iscreateindex int default(0),RecordOrder int not null)";
                     int nResult = sqliteConmand.ExecuteNonQuery();
 
                     sqliteConmand.CommandText = "create index tabledefine_dbtablename_tablename_fieldname on tabledefine(dbtablename,tablename,fieldname)";
                     sqliteConmand.ExecuteNonQuery();
 
-                    sqliteConmand.CommandText = "create table mapdefine(maptype varchar(50) not null, mapoldvalue int not null, mapvalue varchar(100) not null default(''), mapdesc varchar(100))";
+                    sqliteConmand.CommandText = "create table mapdefine(maptype varchar(50) not null, mapoldvalue int not null, mapvalue varchar(100) not null default(''), mapdesc varchar(100),RecordOrder int not null)";
                     nResult = sqliteConmand.ExecuteNonQuery();
 
                     sqliteConmand.CommandText = "create index mapdefine_maptype on mapdefine(maptype)";
@@ -460,7 +463,7 @@ namespace sqlitemodel
                 return;
             }
             SQLiteCommand sCommand = this.connection.CreateCommand();
-            sCommand.CommandText = "select mapoldvalue, mapvalue, mapdesc from mapdefine where maptype='" + this.txtMapType.Text + "'";
+            sCommand.CommandText = "select mapoldvalue, mapvalue, mapdesc, RecordOrder from mapdefine where maptype='" + this.txtMapType.Text + "'";
             
             SQLiteDataReader reader = sCommand.ExecuteReader();
 
@@ -472,7 +475,7 @@ namespace sqlitemodel
                 dr.Cells[0].Value = reader.GetValue(0).ToString();
                 dr.Cells[1].Value = reader.GetValue(1).ToString();
                 dr.Cells[2].Value = reader.GetValue(2).ToString();
-
+                dr.Cells[3].Value = reader.GetValue(3).ToString();
                 this.dgvMapTypeInfo.Rows.Add(dr);
             }
         }
@@ -513,13 +516,21 @@ namespace sqlitemodel
                 dr.Cells[3].Value = sqReader.GetValue(4).ToString();
                 dr.Cells[4].Value = sqReader.GetValue(6).ToString();                    
                 dr.Cells[5].Value = sqReader.GetInt32(7) == 1 ? true : false;
-
+                dr.Cells[6].Value = sqReader.GetInt32(8);
                 if (dr.Cells[4].Value != "")
                 {
                     Globals.Sheet2.cboMapType.Items.Add(dr.Cells[4].Value);
                 }
                 this.dgvTableDefine.Rows.Add(dr);
             }
+            btnModifyTable.Enabled = true;
+
+            Globals.Sheet3.BindData(this.txtTableDBName.Text);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.dgvTableDefine.ReadOnly = false;
         }  
     }
 }

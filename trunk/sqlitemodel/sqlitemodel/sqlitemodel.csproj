@@ -153,6 +153,9 @@
     <EmbeddedResource Include="Sheet2.resx">
       <DependentUpon>Sheet2.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Sheet3.resx">
+      <DependentUpon>Sheet3.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

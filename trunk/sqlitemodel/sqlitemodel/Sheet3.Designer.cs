@@ -20,6 +20,8 @@ namespace sqlitemodel {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Tools.Office.ProgrammingModel.dll", "10.0.0.0")]
         private global::System.Object missing = global::System.Type.Missing;
         
+        internal Microsoft.Office.Tools.Excel.Controls.Button button1;
+        
         /// 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
@@ -129,6 +131,7 @@ namespace sqlitemodel {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Tools.Office.ProgrammingModel.dll", "10.0.0.0")]
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
         private void InitializeControls() {
+            this.button1 = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "1AC5D7FB21FF9614E26191C91E9009A2710081", "1AC5D7FB21FF9614E26191C91E9009A2710081", this, "button1");
         }
         
         /// 
@@ -136,6 +139,18 @@ namespace sqlitemodel {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Tools.Office.ProgrammingModel.dll", "10.0.0.0")]
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
         private void InitializeComponents() {
+            // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.SystemColors.Control;
+            this.button1.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.button1.Name = "button1";
+            this.button1.Text = "保存修改";
+            this.button1.UseVisualStyleBackColor = false;
+            // 
+            // Sheet3
+            // 
+            this.button1.BindingContext = this.BindingContext;
         }
         
         /// 
