@@ -68,12 +68,13 @@ namespace sqlitemodel
             //  首先，检查映射名称是否存在，如果存在，不能创建映射类型
             System.Data.SQLite.SQLiteCommand sCommand = Globals.Sheet1.connection.CreateCommand();
             sCommand.CommandText = "select * from mapdefine where maptype='" + this.cboMapType.Text + "'"; 
-            int nResult = sCommand.ExecuteNonQuery();
-            if (nResult != 0)
+            SQLiteDataReader sqReader = sCommand.ExecuteReader();
+            if (sqReader.HasRows)
             {
                 MessageBox.Show("已经存在映射类型，无法创建统一名称的映射类型", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+            sqReader.Close();
 
             //  检查datagridview中设置的映射数据是否合法
             for (int i = 1; i < this.dgvMapInfoOfCurType.RowCount; ++i)
@@ -100,7 +101,17 @@ namespace sqlitemodel
                     }
                 }
             }
-
+            for (int i = 1; i < this.dgvMapInfoOfCurType.RowCount; ++i)
+            {
+                for (int j = i + 1; j < this.dgvMapInfoOfCurType.RowCount; ++j)
+                {
+                    if (this.dgvMapInfoOfCurType.Rows[i - 1].Cells[3].Value.ToString() == this.dgvMapInfoOfCurType.Rows[j - 1].Cells[3].Value.ToString())
+                    {
+                        MessageBox.Show("字段序号重复，无法保存", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+            }
             
 
             //  保存到数据库中
@@ -113,6 +124,10 @@ namespace sqlitemodel
                 for (int j = 1; j <= this.dgvMapInfoOfCurType.ColumnCount; ++j)
                 {   
                     if (j == 1)
+                    {
+                        sInsertSql += "," + this.dgvMapInfoOfCurType.Rows[i - 1].Cells[j - 1].Value.ToString();
+                    }
+                    else if (j == 4)
                     {
                         sInsertSql += "," + this.dgvMapInfoOfCurType.Rows[i - 1].Cells[j - 1].Value.ToString();
                     }
@@ -178,6 +193,8 @@ namespace sqlitemodel
                 dr.Cells[0].Value = sqReader.GetValue(1).ToString();
                 dr.Cells[1].Value = sqReader.GetValue(2).ToString();
                 dr.Cells[2].Value = sqReader.GetValue(3).ToString();
+                dr.Cells[3].Value = sqReader.GetInt32(4);
+
 
                 this.dgvMapInfoOfCurType.Rows.Add(dr);
             }           

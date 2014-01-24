@@ -38,6 +38,8 @@ namespace sqlitemodel {
         
         internal System.Windows.Forms.DataGridViewTextBoxColumn mapdesc;
         
+        internal System.Windows.Forms.DataGridViewTextBoxColumn colRecordOrder;
+        
         /// 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
@@ -164,6 +166,7 @@ namespace sqlitemodel {
             this.mapoldvalue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.mapvalue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.mapdesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colRecordOrder = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMapInfoOfCurType)).BeginInit();
             // 
             // label1
@@ -184,7 +187,8 @@ namespace sqlitemodel {
             this.dgvMapInfoOfCurType.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
                         this.mapoldvalue,
                         this.mapvalue,
-                        this.mapdesc});
+                        this.mapdesc,
+                        this.colRecordOrder});
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -197,27 +201,6 @@ namespace sqlitemodel {
             this.dgvMapInfoOfCurType.ReadOnly = true;
             this.dgvMapInfoOfCurType.RowTemplate.Height = 23;
             this.dgvMapInfoOfCurType.Text = "dataGridView1";
-            // 
-            // mapoldvalue
-            // 
-            this.mapoldvalue.HeaderText = "映射原始值";
-            this.mapoldvalue.Name = "mapoldvalue";
-            this.mapoldvalue.ReadOnly = true;
-            this.mapoldvalue.Width = 150;
-            // 
-            // mapvalue
-            // 
-            this.mapvalue.HeaderText = "映射值";
-            this.mapvalue.Name = "mapvalue";
-            this.mapvalue.ReadOnly = true;
-            this.mapvalue.Width = 250;
-            // 
-            // mapdesc
-            // 
-            this.mapdesc.HeaderText = "映射说明";
-            this.mapdesc.Name = "mapdesc";
-            this.mapdesc.ReadOnly = true;
-            this.mapdesc.Width = 300;
             // 
             // btnSaveToDB
             // 
@@ -243,6 +226,33 @@ namespace sqlitemodel {
             this.btnBeginCreate.Name = "btnBeginCreate";
             this.btnBeginCreate.Text = "开始编辑";
             this.btnBeginCreate.UseVisualStyleBackColor = false;
+            // 
+            // mapoldvalue
+            // 
+            this.mapoldvalue.HeaderText = "映射原始值";
+            this.mapoldvalue.Name = "mapoldvalue";
+            this.mapoldvalue.ReadOnly = true;
+            this.mapoldvalue.Width = 150;
+            // 
+            // mapvalue
+            // 
+            this.mapvalue.HeaderText = "映射值";
+            this.mapvalue.Name = "mapvalue";
+            this.mapvalue.ReadOnly = true;
+            this.mapvalue.Width = 250;
+            // 
+            // mapdesc
+            // 
+            this.mapdesc.HeaderText = "映射说明";
+            this.mapdesc.Name = "mapdesc";
+            this.mapdesc.ReadOnly = true;
+            this.mapdesc.Width = 300;
+            // 
+            // colRecordOrder
+            // 
+            this.colRecordOrder.HeaderText = "字段序号";
+            this.colRecordOrder.Name = "colRecordOrder";
+            this.colRecordOrder.ReadOnly = true;
             // 
             // Sheet2
             // 

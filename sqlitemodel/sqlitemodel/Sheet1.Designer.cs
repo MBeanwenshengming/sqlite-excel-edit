@@ -60,6 +60,12 @@ namespace sqlitemodel {
         
         internal Microsoft.Office.Tools.Excel.Controls.TextBox txtTableDBName;
         
+        internal Microsoft.Office.Tools.Excel.Controls.Button btnModifyTable;
+        
+        internal Microsoft.Office.Tools.Excel.Controls.Button btnSaveTableModify;
+        
+        internal Microsoft.Office.Tools.Excel.Controls.Button button1;
+        
         internal System.Windows.Forms.ColumnHeader 序号;
         
         internal System.Windows.Forms.ColumnHeader 字段名;
@@ -67,12 +73,6 @@ namespace sqlitemodel {
         internal System.Windows.Forms.ColumnHeader 字段类型;
         
         internal System.Windows.Forms.DataGridViewTextBoxColumn colAvailableMapType;
-        
-        internal System.Windows.Forms.DataGridViewTextBoxColumn colOldValue;
-        
-        internal System.Windows.Forms.DataGridViewTextBoxColumn colNewValue;
-        
-        internal System.Windows.Forms.DataGridViewTextBoxColumn colMapValueDesc;
         
         internal System.Windows.Forms.ColumnHeader 字段说明;
         
@@ -89,6 +89,16 @@ namespace sqlitemodel {
         internal System.Windows.Forms.DataGridViewTextBoxColumn colMapType;
         
         internal System.Windows.Forms.DataGridViewCheckBoxColumn colindex;
+        
+        internal System.Windows.Forms.DataGridViewTextBoxColumn colRecordOrder;
+        
+        internal System.Windows.Forms.DataGridViewTextBoxColumn colOldValue;
+        
+        internal System.Windows.Forms.DataGridViewTextBoxColumn colNewValue;
+        
+        internal System.Windows.Forms.DataGridViewTextBoxColumn colMapValueDesc;
+        
+        internal System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         
         /// 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -219,6 +229,9 @@ namespace sqlitemodel {
             this.btnstartCreate = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "2C226BA75293532414E294EF2E8FFD852516E2", "2C226BA75293532414E294EF2E8FFD852516E2", this, "btnstartCreate");
             this.label6 = new Microsoft.Office.Tools.Excel.Controls.Label(Globals.Factory, this.ItemProvider, this.HostContext, "24FD265452D60024F9A280F02550102B3AD382", "24FD265452D60024F9A280F02550102B3AD382", this, "label6");
             this.txtTableDBName = new Microsoft.Office.Tools.Excel.Controls.TextBox(Globals.Factory, this.ItemProvider, this.HostContext, "23625AFFA2628524BD1294142C1CE98943D5C2", "23625AFFA2628524BD1294142C1CE98943D5C2", this, "txtTableDBName");
+            this.btnModifyTable = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "2D9D1C989225B1249A82A0F72C85756886E7F2", "2D9D1C989225B1249A82A0F72C85756886E7F2", this, "btnModifyTable");
+            this.btnSaveTableModify = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "274C5BEFC2F81C24D2E2A90921A55823E21552", "274C5BEFC2F81C24D2E2A90921A55823E21552", this, "btnSaveTableModify");
+            this.button1 = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "3A79EA9BF37C5934E0739C393D6E9BA2CF65E3", "3A79EA9BF37C5934E0739C393D6E9BA2CF65E3", this, "button1");
         }
         
         /// 
@@ -229,21 +242,23 @@ namespace sqlitemodel {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.colAvailableMapType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colOldValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colNewValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colMapValueDesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.序号 = new System.Windows.Forms.ColumnHeader();
-            this.字段名 = new System.Windows.Forms.ColumnHeader();
-            this.字段类型 = new System.Windows.Forms.ColumnHeader();
-            this.字段说明 = new System.Windows.Forms.ColumnHeader();
-            this.数据库字段名 = new System.Windows.Forms.ColumnHeader();
             this.colname = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDBName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.coldesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDBFieldType = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.colMapType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colindex = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.colRecordOrder = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colAvailableMapType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colOldValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colNewValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colMapValueDesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.序号 = new System.Windows.Forms.ColumnHeader();
+            this.字段名 = new System.Windows.Forms.ColumnHeader();
+            this.字段类型 = new System.Windows.Forms.ColumnHeader();
+            this.字段说明 = new System.Windows.Forms.ColumnHeader();
+            this.数据库字段名 = new System.Windows.Forms.ColumnHeader();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTableDefine)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAvailableMapType)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMapTypeInfo)).BeginInit();
@@ -302,7 +317,8 @@ namespace sqlitemodel {
                         this.coldesc,
                         this.colDBFieldType,
                         this.colMapType,
-                        this.colindex});
+                        this.colindex,
+                        this.colRecordOrder});
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -316,6 +332,65 @@ namespace sqlitemodel {
             this.dgvTableDefine.ReadOnly = true;
             this.dgvTableDefine.RowTemplate.Height = 23;
             this.dgvTableDefine.Text = "dataGridView1";
+            // 
+            // colname
+            // 
+            this.colname.HeaderText = "字段名称";
+            this.colname.Name = "colname";
+            this.colname.ReadOnly = true;
+            this.colname.Width = 200;
+            // 
+            // colDBName
+            // 
+            this.colDBName.HeaderText = "字段数据库名称";
+            this.colDBName.Name = "colDBName";
+            this.colDBName.ReadOnly = true;
+            // 
+            // coldesc
+            // 
+            this.coldesc.HeaderText = "字段说明";
+            this.coldesc.Name = "coldesc";
+            this.coldesc.ReadOnly = true;
+            this.coldesc.Width = 200;
+            // 
+            // colDBFieldType
+            // 
+            this.colDBFieldType.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.ComboBox;
+            this.colDBFieldType.HeaderText = "字段数据库类型";
+            this.colDBFieldType.Items.AddRange(new object[] {
+                        "integer",
+                        "float",
+                        "bigint",
+                        "varchar(20)",
+                        "varchar(10)",
+                        "varchar(100)",
+                        "varchar(50)",
+                        "tinyint",
+                        "smallint",
+                        "char"});
+            this.colDBFieldType.Name = "colDBFieldType";
+            this.colDBFieldType.ReadOnly = true;
+            this.colDBFieldType.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.colDBFieldType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // colMapType
+            // 
+            this.colMapType.HeaderText = "字段映射类型";
+            this.colMapType.Name = "colMapType";
+            this.colMapType.ReadOnly = true;
+            this.colMapType.Width = 200;
+            // 
+            // colindex
+            // 
+            this.colindex.HeaderText = "创建索引";
+            this.colindex.Name = "colindex";
+            this.colindex.ReadOnly = true;
+            // 
+            // colRecordOrder
+            // 
+            this.colRecordOrder.HeaderText = "字段序号";
+            this.colRecordOrder.Name = "colRecordOrder";
+            this.colRecordOrder.ReadOnly = true;
             // 
             // label3
             // 
@@ -376,7 +451,8 @@ namespace sqlitemodel {
             this.dgvMapTypeInfo.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
                         this.colOldValue,
                         this.colNewValue,
-                        this.colMapValueDesc});
+                        this.colMapValueDesc,
+                        this.dataGridViewTextBoxColumn1});
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle3.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -410,6 +486,12 @@ namespace sqlitemodel {
             this.colMapValueDesc.Name = "colMapValueDesc";
             this.colMapValueDesc.ReadOnly = true;
             this.colMapValueDesc.Width = 200;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.HeaderText = "记录序号";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.ReadOnly = true;
             // 
             // btnCreateDB
             // 
@@ -461,58 +543,31 @@ namespace sqlitemodel {
             this.txtTableDBName.Name = "txtTableDBName";
             this.txtTableDBName.Text = "表英文名称";
             // 
-            // colname
+            // btnModifyTable
             // 
-            this.colname.HeaderText = "字段名称";
-            this.colname.Name = "colname";
-            this.colname.ReadOnly = true;
-            this.colname.Width = 200;
+            this.btnModifyTable.BackColor = System.Drawing.SystemColors.Control;
+            this.btnModifyTable.Enabled = false;
+            this.btnModifyTable.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnModifyTable.Name = "btnModifyTable";
+            this.btnModifyTable.Text = "修改数据表";
+            this.btnModifyTable.UseVisualStyleBackColor = false;
             // 
-            // colDBName
+            // btnSaveTableModify
             // 
-            this.colDBName.HeaderText = "字段数据库名称";
-            this.colDBName.Name = "colDBName";
-            this.colDBName.ReadOnly = true;
+            this.btnSaveTableModify.BackColor = System.Drawing.SystemColors.Control;
+            this.btnSaveTableModify.Enabled = false;
+            this.btnSaveTableModify.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnSaveTableModify.Name = "btnSaveTableModify";
+            this.btnSaveTableModify.Text = "保存表修改";
+            this.btnSaveTableModify.UseVisualStyleBackColor = false;
             // 
-            // coldesc
+            // button1
             // 
-            this.coldesc.HeaderText = "字段说明";
-            this.coldesc.Name = "coldesc";
-            this.coldesc.ReadOnly = true;
-            this.coldesc.Width = 200;
-            // 
-            // colDBFieldType
-            // 
-            this.colDBFieldType.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.ComboBox;
-            this.colDBFieldType.HeaderText = "字段数据库类型";
-            this.colDBFieldType.Items.AddRange(new object[] {
-                        "integer",
-                        "float",
-                        "bigint",
-                        "varchar(20)",
-                        "varchar(10)",
-                        "varchar(100)",
-                        "varchar(50)",
-                        "tinyint",
-                        "smallint",
-                        "char"});
-            this.colDBFieldType.Name = "colDBFieldType";
-            this.colDBFieldType.ReadOnly = true;
-            this.colDBFieldType.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.colDBFieldType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // colMapType
-            // 
-            this.colMapType.HeaderText = "字段映射类型";
-            this.colMapType.Name = "colMapType";
-            this.colMapType.ReadOnly = true;
-            this.colMapType.Width = 200;
-            // 
-            // colindex
-            // 
-            this.colindex.HeaderText = "创建索引";
-            this.colindex.Name = "colindex";
-            this.colindex.ReadOnly = true;
+            this.button1.BackColor = System.Drawing.SystemColors.Control;
+            this.button1.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.button1.Name = "button1";
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = false;
             // 
             // Sheet1
             // 
@@ -539,6 +594,9 @@ namespace sqlitemodel {
             this.btnstartCreate.BindingContext = this.BindingContext;
             this.label6.BindingContext = this.BindingContext;
             this.txtTableDBName.BindingContext = this.BindingContext;
+            this.btnModifyTable.BindingContext = this.BindingContext;
+            this.btnSaveTableModify.BindingContext = this.BindingContext;
+            this.button1.BindingContext = this.BindingContext;
         }
         
         /// 
