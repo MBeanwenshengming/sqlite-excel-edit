@@ -45,7 +45,10 @@ namespace sqlitemodel
             this.btnlistMapType.Click += new System.EventHandler(this.btnlistMapType_Click);
             this.btnCreateDB.Click += new System.EventHandler(this.btnCreateDB_Click);
             this.btnstartCreate.Click += new System.EventHandler(this.btnstartCreate_Click);
-            this.btnModifyTable.Click += new System.EventHandler(this.button1_Click);
+            this.btnselect.Click += new System.EventHandler(this.btnselect_Click);
+            this.btndeletetable.Click += new System.EventHandler(this.btndeletetable_Click);
+            this.cboToModifyTable.SelectedIndexChanged += new System.EventHandler(this.cboToModifyTable_SelectedIndexChanged);
+            this.btnmodify.Click += new System.EventHandler(this.btnmodify_Click);
             this.Startup += new System.EventHandler(this.Sheet1_Startup);
             this.Shutdown += new System.EventHandler(this.Sheet1_Shutdown);
 
@@ -263,10 +266,14 @@ namespace sqlitemodel
                     }
                 }
                 sqTrans.Commit();
+
+                MessageBox.Show("数据表建立成功", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception E)
-            {                
+            {      
                 sqTrans.Rollback();
+
+                MessageBox.Show(E.ToString(), "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             
             //  在数据库创建该表
@@ -274,7 +281,10 @@ namespace sqlitemodel
             this.txtTableDBName.Enabled = false;
             this.dgvTableDefine.ReadOnly = true;
             this.btnCreate.Enabled = false;
-            //this.cboTable.DropDownStyle = ComboBoxStyle.DropDownList;
+            this.btnstartCreate.Enabled = true;
+            this.cboavailabletemplelate.Enabled = false;
+            this.btnselect.Enabled = false;
+            FreshAvailableTable();
         }
         private bool isABC(string sValue)
         {
@@ -309,6 +319,9 @@ namespace sqlitemodel
 
         private void btnopendb_Click(object sender, EventArgs e)
         {
+            // 清空所有内容
+            this.ClearWorkBookContent();
+
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Title = "选择要打开的数据库文件";
             openFileDialog.InitialDirectory = "c://";
@@ -343,6 +356,8 @@ namespace sqlitemodel
                         {
                             string sName = s.GetString(0);                            
                             this.cboTable.Items.Add(sName);
+                            this.cboavailabletemplelate.Items.Add(sName);
+                            this.cboToModifyTable.Items.Add(sName);
                         }
                         MessageBox.Show("已存在的表名已经装载成功", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
@@ -361,13 +376,21 @@ namespace sqlitemodel
                             dr.Cells[0].Value = sName;
 
                             this.dgvAvailableMapType.Rows.Add(dr);
+
+                            Globals.Sheet2.cboMapType.Items.Add(sName);
                         }
                         MessageBox.Show("可用映射已经装载成功", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
+                    //  设置可用的按钮
+                    this.btnOpen.Enabled = true;
+                    this.btndeletetable.Enabled = true;
+                    this.btnstartCreate.Enabled = true;
+                    Globals.Sheet2.btnGetFromDB.Enabled = true;
+                    Globals.Sheet2.btnBeginCreate.Enabled = true;
                 }
                 catch (Exception excep)
                 {
-                    MessageBox.Show("数据库打开出错", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(excep.ToString(), "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             } 
         }
@@ -429,7 +452,7 @@ namespace sqlitemodel
                 }
                 catch (Exception excep)
                 {
-                    MessageBox.Show("创建数据库出错", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(excep.ToString(), "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
             } 
@@ -442,7 +465,10 @@ namespace sqlitemodel
             this.dgvTableDefine.ReadOnly = false;
             this.btnCreate.Enabled = true;
             this.dgvTableDefine.Rows.Clear();
-            //this.cboTable.DropDownStyle = ComboBoxStyle.DropDown;
+            this.cboavailabletemplelate.Enabled = true;
+            this.btnselect.Enabled = true;
+            this.btnCreate.Enabled = true;
+            this.btnstartCreate.Enabled = false;
         }
 
         private void btnlistMapType_Click(object sender, EventArgs e)
@@ -481,7 +507,7 @@ namespace sqlitemodel
         }
 
         private void btnOpen_Click(object sender, EventArgs e)
-        {
+        {    
             if (this.connection == null)
             {
                 MessageBox.Show("数据库未打开", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -517,20 +543,263 @@ namespace sqlitemodel
                 dr.Cells[4].Value = sqReader.GetValue(6).ToString();                    
                 dr.Cells[5].Value = sqReader.GetInt32(7) == 1 ? true : false;
                 dr.Cells[6].Value = sqReader.GetInt32(8);
-                if (dr.Cells[4].Value != "")
-                {
-                    Globals.Sheet2.cboMapType.Items.Add(dr.Cells[4].Value);
-                }
+                //if (dr.Cells[4].Value != "")
+                //{
+                //    Globals.Sheet2.cboMapType.Items.Add(dr.Cells[4].Value);
+                //}
                 this.dgvTableDefine.Rows.Add(dr);
             }
-            btnModifyTable.Enabled = true;
+            sqReader.Close();
 
+            Globals.Sheet3.clear();
             Globals.Sheet3.BindData(this.txtTableDBName.Text);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             this.dgvTableDefine.ReadOnly = false;
-        }  
+        }
+        private void Initcontrols()
+        {
+            this.btnopendb.Enabled = false;
+            this.btndeletetable.Enabled = false;            
+            this.cboTable.Items.Clear();
+
+            this.txtNewTableName.Enabled = false;
+            this.txtTableDBName.Enabled = false;            
+            this.cboavailabletemplelate.Items.Clear();
+            this.btnselect.Enabled = false;
+            this.btnstartCreate.Enabled = false;
+            this.btnCreate.Enabled = false;
+        }
+
+        private void btndeletetable_Click(object sender, EventArgs e)
+        {
+            if (this.cboTable.Text == null)
+            {
+                MessageBox.Show("请选择要删除的数据表(已有数据表下拉框选择)", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            if (this.cboTable.Text == "")
+            {
+                MessageBox.Show("请选择要删除的数据表(已有数据表下拉框选择)", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            if (MessageBox.Show("是否删除数据表(" + this.cboTable.Text + ")", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
+            {
+                return;
+            }
+            SQLiteTransaction sqTrans = this.connection.BeginTransaction();
+            SQLiteCommand sqCommand = this.connection.CreateCommand();
+            try
+            {
+                string strdbtablename = "";
+                sqCommand.CommandText = "select dbtablename from tabledefine where tablename='" + this.cboTable.Text + "'";
+                SQLiteDataReader sqReader =  sqCommand.ExecuteReader();
+                if (!sqReader.HasRows)
+                {
+                    sqTrans.Rollback();
+                    MessageBox.Show("无法找到对应的数据库表", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                else
+                {
+                    if (sqReader.Read())
+                    {
+                        strdbtablename = sqReader.GetString(0);
+                    }
+                }
+                sqReader.Close();
+
+                if (strdbtablename == "")
+                {
+                    sqTrans.Rollback();
+                    MessageBox.Show("无法找到对应的数据库表", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                sqCommand.CommandText = "drop table " + strdbtablename;
+                sqCommand.ExecuteNonQuery();
+
+                sqCommand.CommandText = "delete from tabledefine where tablename='" + this.cboTable.Text + "'";
+                sqCommand.ExecuteNonQuery();
+
+                sqTrans.Commit();
+                MessageBox.Show("数据表删除成功", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                this.cboTable.Items.Remove(this.cboTable.Text);
+
+                FreshAvailableTable();
+            }
+            catch (Exception E)
+            {
+                sqTrans.Rollback();
+                MessageBox.Show(E.ToString(), "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        public void FreshAvailableTable()
+        {
+            this.cboavailabletemplelate.Items.Clear();
+            this.cboTable.Items.Clear();
+            this.cboToModifyTable.Items.Clear();
+
+            //  读取已经有的数据库定义表
+            SQLiteCommand sqliteCommand = connection.CreateCommand();
+            sqliteCommand.CommandText = "select tablename from tabledefine group by tablename";
+
+            SQLiteDataReader s = sqliteCommand.ExecuteReader();
+            int nFieldCount = s.FieldCount;
+            //s.
+            if (s.HasRows)
+            {
+                while (s.Read())
+                {
+                    string sName = s.GetString(0);
+                    this.cboTable.Items.Add(sName);
+                    this.cboavailabletemplelate.Items.Add(sName);
+                    this.cboToModifyTable.Items.Add(sName);
+                }
+                //MessageBox.Show("已存在的表名已经装载成功", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            s.Close();
+        }
+        private void ClearWorkBookContent()
+        {
+            this.cboavailabletemplelate.Items.Clear();
+            this.cboTable.Items.Clear();
+            this.cboToModifyTable.Items.Clear();
+
+            this.dgvTableDefine.Rows.Clear();
+            this.dgvAvailableMapType.Rows.Clear();
+            this.dgvMapTypeInfo.Rows.Clear();
+
+            Globals.Sheet2.ClearContent();
+            Globals.Sheet3.clear();
+        }
+
+        private void btnselect_Click(object sender, EventArgs e)
+        {
+            if (this.cboavailabletemplelate.Text == null)
+            {
+                MessageBox.Show("请选择模板表名称", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            if (this.cboavailabletemplelate.Text == "")
+            {
+                MessageBox.Show("请选择模板表名称", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            if (MessageBox.Show("该操作将清空表定义内容并且设置模板表的字段信息，是否继续？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.Cancel)
+            {
+                return;
+            }
+            this.dgvTableDefine.Rows.Clear();
+
+            SQLiteCommand sqCommand = this.connection.CreateCommand();
+            sqCommand.CommandText = "select * from tabledefine where tablename='" + this.cboavailabletemplelate.Text + "'";
+            SQLiteDataReader sqReader = sqCommand.ExecuteReader();
+
+            while (sqReader.Read())
+            {
+                DataGridViewRow dr = new DataGridViewRow();
+                dr.CreateCells(this.dgvTableDefine);
+                dr.Cells[0].Value = sqReader.GetValue(2).ToString();
+                dr.Cells[1].Value = sqReader.GetValue(5).ToString();
+                dr.Cells[2].Value = sqReader.GetValue(3).ToString();
+                dr.Cells[3].Value = sqReader.GetValue(4).ToString();
+                dr.Cells[4].Value = sqReader.GetValue(6).ToString();
+                dr.Cells[5].Value = sqReader.GetInt32(7) == 1 ? true : false;
+                dr.Cells[6].Value = sqReader.GetInt32(8).ToString();
+                this.dgvTableDefine.Rows.Add(dr);
+            }
+            sqReader.Close();
+        }
+
+        private void cboToModifyTable_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.cboToModifyTable.Text == null)
+            {
+                return;
+            }
+            if (this.cboToModifyTable.Text == "")
+            {
+                return;
+            }            
+            SQLiteCommand sqCommand = this.connection.CreateCommand();
+            sqCommand.CommandText = "select tablename, dbtablename from tabledefine where tablename='" + this.cboToModifyTable.Text + "'";
+            SQLiteDataReader sqReader = sqCommand.ExecuteReader();
+            if (!sqReader.HasRows)
+            {
+                return;
+            }
+            if (sqReader.Read())
+            {
+                this.txtmoname.Text = sqReader.GetString(0);
+                this.txtmonewname.Text = sqReader.GetString(0);
+                this.txtmodbname.Text = sqReader.GetString(1);
+                this.txtmonewdbname.Text = sqReader.GetString(1);
+            }
+            else
+            {
+                return;
+            }
+            sqReader.Close();
+        }
+
+        private void btnmodify_Click(object sender, EventArgs e)
+        {
+            if (this.txtmonewdbname.Text == "")
+            {
+                MessageBox.Show("新数据库表名不能为空", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            if (this.txtmonewname.Text == "")
+            {
+                MessageBox.Show("新表名不能为空", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            if (!this.isABC(this.txtmonewdbname.Text))
+            {
+                MessageBox.Show("新数据库表名只能由字母组成", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            SQLiteCommand sqCommand = this.connection.CreateCommand();
+            sqCommand.CommandText = "select * from tabledefine where dbtablename='" + this.txtmonewdbname.Text + "'";
+            SQLiteDataReader sqReader = sqCommand.ExecuteReader();
+            if (sqReader.HasRows)
+            {
+                MessageBox.Show("新的数据库表名在数据库中已经存在", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            sqReader.Close();
+
+            sqCommand.CommandText = "select * from tabledefine where tablename='" + this.txtmonewname.Text +"' and dbtablename<>'" + this.txtmodbname.Text + "'";
+            sqReader = sqCommand.ExecuteReader();
+            if (sqReader.HasRows)
+            {
+                MessageBox.Show("新的表名在数据库中存在，无法改名", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            sqReader.Close();
+
+            //  更新表名
+            SQLiteTransaction sqTrans = this.connection.BeginTransaction();
+            try
+            {
+                sqCommand.CommandText = "update tabledefine set dbtablename='" + this.txtmonewdbname.Text + "',tablename='" + this.txtmonewname.Text + "' where tablename='" + this.txtmoname.Text + "'";
+                sqCommand.ExecuteNonQuery();
+
+                sqCommand.CommandText = "alter table " + this.txtmodbname.Text + " rename to " + this.txtmonewdbname.Text;
+                sqCommand.ExecuteNonQuery();
+
+                sqTrans.Commit();
+                this.FreshAvailableTable();
+                MessageBox.Show("改名成功", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception error)
+            {
+                sqTrans.Rollback();
+                MessageBox.Show(error.ToString(), "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
