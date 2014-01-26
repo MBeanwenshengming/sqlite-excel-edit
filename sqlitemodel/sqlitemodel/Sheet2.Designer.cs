@@ -202,31 +202,6 @@ namespace sqlitemodel {
             this.dgvMapInfoOfCurType.RowTemplate.Height = 23;
             this.dgvMapInfoOfCurType.Text = "dataGridView1";
             // 
-            // btnSaveToDB
-            // 
-            this.btnSaveToDB.BackColor = System.Drawing.SystemColors.Control;
-            this.btnSaveToDB.Enabled = false;
-            this.btnSaveToDB.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnSaveToDB.Name = "btnSaveToDB";
-            this.btnSaveToDB.Text = "保存当前值到数据库";
-            this.btnSaveToDB.UseVisualStyleBackColor = false;
-            // 
-            // btnGetFromDB
-            // 
-            this.btnGetFromDB.BackColor = System.Drawing.SystemColors.Control;
-            this.btnGetFromDB.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnGetFromDB.Name = "btnGetFromDB";
-            this.btnGetFromDB.Text = "从数据库获取";
-            this.btnGetFromDB.UseVisualStyleBackColor = false;
-            // 
-            // btnBeginCreate
-            // 
-            this.btnBeginCreate.BackColor = System.Drawing.SystemColors.Control;
-            this.btnBeginCreate.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnBeginCreate.Name = "btnBeginCreate";
-            this.btnBeginCreate.Text = "开始编辑";
-            this.btnBeginCreate.UseVisualStyleBackColor = false;
-            // 
             // mapoldvalue
             // 
             this.mapoldvalue.HeaderText = "映射原始值";
@@ -253,6 +228,33 @@ namespace sqlitemodel {
             this.colRecordOrder.HeaderText = "字段序号";
             this.colRecordOrder.Name = "colRecordOrder";
             this.colRecordOrder.ReadOnly = true;
+            // 
+            // btnSaveToDB
+            // 
+            this.btnSaveToDB.BackColor = System.Drawing.SystemColors.Control;
+            this.btnSaveToDB.Enabled = false;
+            this.btnSaveToDB.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnSaveToDB.Name = "btnSaveToDB";
+            this.btnSaveToDB.Text = "保存当前值到数据库";
+            this.btnSaveToDB.UseVisualStyleBackColor = false;
+            // 
+            // btnGetFromDB
+            // 
+            this.btnGetFromDB.BackColor = System.Drawing.SystemColors.Control;
+            this.btnGetFromDB.Enabled = false;
+            this.btnGetFromDB.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnGetFromDB.Name = "btnGetFromDB";
+            this.btnGetFromDB.Text = "从数据库获取";
+            this.btnGetFromDB.UseVisualStyleBackColor = false;
+            // 
+            // btnBeginCreate
+            // 
+            this.btnBeginCreate.BackColor = System.Drawing.SystemColors.Control;
+            this.btnBeginCreate.Enabled = false;
+            this.btnBeginCreate.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnBeginCreate.Name = "btnBeginCreate";
+            this.btnBeginCreate.Text = "开始编辑";
+            this.btnBeginCreate.UseVisualStyleBackColor = false;
             // 
             // Sheet2
             // 

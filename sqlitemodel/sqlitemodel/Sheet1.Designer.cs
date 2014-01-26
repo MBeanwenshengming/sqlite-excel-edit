@@ -60,11 +60,31 @@ namespace sqlitemodel {
         
         internal Microsoft.Office.Tools.Excel.Controls.TextBox txtTableDBName;
         
-        internal Microsoft.Office.Tools.Excel.Controls.Button btnModifyTable;
+        internal Microsoft.Office.Tools.Excel.Controls.ComboBox cboavailabletemplelate;
         
-        internal Microsoft.Office.Tools.Excel.Controls.Button btnSaveTableModify;
+        internal Microsoft.Office.Tools.Excel.Controls.Button btnselect;
         
-        internal Microsoft.Office.Tools.Excel.Controls.Button button1;
+        internal Microsoft.Office.Tools.Excel.Controls.Button btndeletetable;
+        
+        internal Microsoft.Office.Tools.Excel.Controls.ComboBox cboToModifyTable;
+        
+        internal Microsoft.Office.Tools.Excel.Controls.TextBox txtmoname;
+        
+        internal Microsoft.Office.Tools.Excel.Controls.TextBox txtmodbname;
+        
+        internal Microsoft.Office.Tools.Excel.Controls.Label yuan;
+        
+        internal Microsoft.Office.Tools.Excel.Controls.Label label8;
+        
+        internal Microsoft.Office.Tools.Excel.Controls.Label label9;
+        
+        internal Microsoft.Office.Tools.Excel.Controls.Label label10;
+        
+        internal Microsoft.Office.Tools.Excel.Controls.TextBox txtmonewname;
+        
+        internal Microsoft.Office.Tools.Excel.Controls.TextBox txtmonewdbname;
+        
+        internal Microsoft.Office.Tools.Excel.Controls.Button btnmodify;
         
         internal System.Windows.Forms.ColumnHeader 序号;
         
@@ -229,9 +249,19 @@ namespace sqlitemodel {
             this.btnstartCreate = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "2C226BA75293532414E294EF2E8FFD852516E2", "2C226BA75293532414E294EF2E8FFD852516E2", this, "btnstartCreate");
             this.label6 = new Microsoft.Office.Tools.Excel.Controls.Label(Globals.Factory, this.ItemProvider, this.HostContext, "24FD265452D60024F9A280F02550102B3AD382", "24FD265452D60024F9A280F02550102B3AD382", this, "label6");
             this.txtTableDBName = new Microsoft.Office.Tools.Excel.Controls.TextBox(Globals.Factory, this.ItemProvider, this.HostContext, "23625AFFA2628524BD1294142C1CE98943D5C2", "23625AFFA2628524BD1294142C1CE98943D5C2", this, "txtTableDBName");
-            this.btnModifyTable = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "2D9D1C989225B1249A82A0F72C85756886E7F2", "2D9D1C989225B1249A82A0F72C85756886E7F2", this, "btnModifyTable");
-            this.btnSaveTableModify = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "274C5BEFC2F81C24D2E2A90921A55823E21552", "274C5BEFC2F81C24D2E2A90921A55823E21552", this, "btnSaveTableModify");
-            this.button1 = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "3A79EA9BF37C5934E0739C393D6E9BA2CF65E3", "3A79EA9BF37C5934E0739C393D6E9BA2CF65E3", this, "button1");
+            this.cboavailabletemplelate = new Microsoft.Office.Tools.Excel.Controls.ComboBox(Globals.Factory, this.ItemProvider, this.HostContext, "323607CF7350DE340A8388243C57AAF0EAC1F3", "323607CF7350DE340A8388243C57AAF0EAC1F3", this, "cboavailabletemplelate");
+            this.btnselect = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "35D3B845434FBE3434F3846130EB347A64B2E3", "35D3B845434FBE3434F3846130EB347A64B2E3", this, "btnselect");
+            this.btndeletetable = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "3318E66D2387FF34F333A22D3C94A688FEC693", "3318E66D2387FF34F333A22D3C94A688FEC693", this, "btndeletetable");
+            this.cboToModifyTable = new Microsoft.Office.Tools.Excel.Controls.ComboBox(Globals.Factory, this.ItemProvider, this.HostContext, "3115F63EB30C51347463847B35CFFBE28EF763", "3115F63EB30C51347463847B35CFFBE28EF763", this, "cboToModifyTable");
+            this.txtmoname = new Microsoft.Office.Tools.Excel.Controls.TextBox(Globals.Factory, this.ItemProvider, this.HostContext, "3F83E0BD3350E834E843B8813B985FC503EB53", "3F83E0BD3350E834E843B8813B985FC503EB53", this, "txtmoname");
+            this.txtmodbname = new Microsoft.Office.Tools.Excel.Controls.TextBox(Globals.Factory, this.ItemProvider, this.HostContext, "3648C574D3F34934C3A394EF3DB95740107D83", "3648C574D3F34934C3A394EF3DB95740107D83", this, "txtmodbname");
+            this.yuan = new Microsoft.Office.Tools.Excel.Controls.Label(Globals.Factory, this.ItemProvider, this.HostContext, "32E44DD8A3151034DF738B1E375C505F44B323", "32E44DD8A3151034DF738B1E375C505F44B323", this, "yuan");
+            this.label8 = new Microsoft.Office.Tools.Excel.Controls.Label(Globals.Factory, this.ItemProvider, this.HostContext, "3CD83B4A7328303423A39AFE36684931983D63", "3CD83B4A7328303423A39AFE36684931983D63", this, "label8");
+            this.label9 = new Microsoft.Office.Tools.Excel.Controls.Label(Globals.Factory, this.ItemProvider, this.HostContext, "3A76453313A8703422A3816336AA84B7B3FDE3", "3A76453313A8703422A3816336AA84B7B3FDE3", this, "label9");
+            this.label10 = new Microsoft.Office.Tools.Excel.Controls.Label(Globals.Factory, this.ItemProvider, this.HostContext, "4A898DCB94658D4453748A584FFE944C456B14", "4A898DCB94658D4453748A584FFE944C456B14", this, "label10");
+            this.txtmonewname = new Microsoft.Office.Tools.Excel.Controls.TextBox(Globals.Factory, this.ItemProvider, this.HostContext, "44DA5B41A42BE54477449E9040850944343DA4", "44DA5B41A42BE54477449E9040850944343DA4", this, "txtmonewname");
+            this.txtmonewdbname = new Microsoft.Office.Tools.Excel.Controls.TextBox(Globals.Factory, this.ItemProvider, this.HostContext, "4C67F8248414ED4403B4A0574FF5CBD5D33894", "4C67F8248414ED4403B4A0574FF5CBD5D33894", this, "txtmonewdbname");
+            this.btnmodify = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "48F1B7E4D44859445AE4B0544474117990B964", "48F1B7E4D44859445AE4B0544474117990B964", this, "btnmodify");
         }
         
         /// 
@@ -239,9 +269,9 @@ namespace sqlitemodel {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Tools.Office.ProgrammingModel.dll", "10.0.0.0")]
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
         private void InitializeComponents() {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             this.colname = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDBName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.coldesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -276,6 +306,7 @@ namespace sqlitemodel {
             // btnOpen
             // 
             this.btnOpen.BackColor = System.Drawing.SystemColors.Control;
+            this.btnOpen.Enabled = false;
             this.btnOpen.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnOpen.Name = "btnOpen";
             this.btnOpen.Text = "打开表";
@@ -319,14 +350,14 @@ namespace sqlitemodel {
                         this.colMapType,
                         this.colindex,
                         this.colRecordOrder});
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvTableDefine.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvTableDefine.DefaultCellStyle = dataGridViewCellStyle7;
             this.dgvTableDefine.GridColor = System.Drawing.SystemColors.ButtonShadow;
             this.dgvTableDefine.Name = "dgvTableDefine";
             this.dgvTableDefine.ReadOnly = true;
@@ -404,14 +435,14 @@ namespace sqlitemodel {
             this.dgvAvailableMapType.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
             this.dgvAvailableMapType.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
                         this.colAvailableMapType});
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvAvailableMapType.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvAvailableMapType.DefaultCellStyle = dataGridViewCellStyle8;
             this.dgvAvailableMapType.Name = "dgvAvailableMapType";
             this.dgvAvailableMapType.ReadOnly = true;
             this.dgvAvailableMapType.RowTemplate.Height = 23;
@@ -453,14 +484,14 @@ namespace sqlitemodel {
                         this.colNewValue,
                         this.colMapValueDesc,
                         this.dataGridViewTextBoxColumn1});
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvMapTypeInfo.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvMapTypeInfo.DefaultCellStyle = dataGridViewCellStyle9;
             this.dgvMapTypeInfo.Name = "dgvMapTypeInfo";
             this.dgvMapTypeInfo.ReadOnly = true;
             this.dgvMapTypeInfo.RowTemplate.Height = 23;
@@ -524,6 +555,7 @@ namespace sqlitemodel {
             // btnstartCreate
             // 
             this.btnstartCreate.BackColor = System.Drawing.SystemColors.Control;
+            this.btnstartCreate.Enabled = false;
             this.btnstartCreate.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btnstartCreate.Name = "btnstartCreate";
             this.btnstartCreate.Text = "开始建表";
@@ -543,31 +575,87 @@ namespace sqlitemodel {
             this.txtTableDBName.Name = "txtTableDBName";
             this.txtTableDBName.Text = "表英文名称";
             // 
-            // btnModifyTable
+            // cboavailabletemplelate
             // 
-            this.btnModifyTable.BackColor = System.Drawing.SystemColors.Control;
-            this.btnModifyTable.Enabled = false;
-            this.btnModifyTable.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnModifyTable.Name = "btnModifyTable";
-            this.btnModifyTable.Text = "修改数据表";
-            this.btnModifyTable.UseVisualStyleBackColor = false;
+            this.cboavailabletemplelate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboavailabletemplelate.Enabled = false;
+            this.cboavailabletemplelate.Font = new System.Drawing.Font("宋体", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.cboavailabletemplelate.Name = "cboavailabletemplelate";
             // 
-            // btnSaveTableModify
+            // btnselect
             // 
-            this.btnSaveTableModify.BackColor = System.Drawing.SystemColors.Control;
-            this.btnSaveTableModify.Enabled = false;
-            this.btnSaveTableModify.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnSaveTableModify.Name = "btnSaveTableModify";
-            this.btnSaveTableModify.Text = "保存表修改";
-            this.btnSaveTableModify.UseVisualStyleBackColor = false;
+            this.btnselect.BackColor = System.Drawing.SystemColors.Control;
+            this.btnselect.Enabled = false;
+            this.btnselect.Font = new System.Drawing.Font("宋体", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnselect.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnselect.Name = "btnselect";
+            this.btnselect.Text = "选择模板";
+            this.btnselect.UseVisualStyleBackColor = false;
             // 
-            // button1
+            // btndeletetable
             // 
-            this.button1.BackColor = System.Drawing.SystemColors.Control;
-            this.button1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button1.Name = "button1";
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = false;
+            this.btndeletetable.BackColor = System.Drawing.SystemColors.Control;
+            this.btndeletetable.Enabled = false;
+            this.btndeletetable.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btndeletetable.Name = "btndeletetable";
+            this.btndeletetable.Text = "删除表";
+            this.btndeletetable.UseVisualStyleBackColor = false;
+            // 
+            // cboToModifyTable
+            // 
+            this.cboToModifyTable.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboToModifyTable.Font = new System.Drawing.Font("宋体", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.cboToModifyTable.Name = "cboToModifyTable";
+            // 
+            // txtmoname
+            // 
+            this.txtmoname.Enabled = false;
+            this.txtmoname.Font = new System.Drawing.Font("宋体", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtmoname.Name = "txtmoname";
+            // 
+            // txtmodbname
+            // 
+            this.txtmodbname.Enabled = false;
+            this.txtmodbname.Font = new System.Drawing.Font("宋体", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtmodbname.Name = "txtmodbname";
+            // 
+            // yuan
+            // 
+            this.yuan.Name = "yuan";
+            this.yuan.Text = "原表名";
+            // 
+            // label8
+            // 
+            this.label8.Name = "label8";
+            this.label8.Text = "原数据库表名";
+            // 
+            // label9
+            // 
+            this.label9.Name = "label9";
+            this.label9.Text = "新表名";
+            // 
+            // label10
+            // 
+            this.label10.Name = "label10";
+            this.label10.Text = "新数据库表名";
+            // 
+            // txtmonewname
+            // 
+            this.txtmonewname.Font = new System.Drawing.Font("宋体", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtmonewname.Name = "txtmonewname";
+            // 
+            // txtmonewdbname
+            // 
+            this.txtmonewdbname.Font = new System.Drawing.Font("宋体", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtmonewdbname.Name = "txtmonewdbname";
+            // 
+            // btnmodify
+            // 
+            this.btnmodify.BackColor = System.Drawing.SystemColors.Control;
+            this.btnmodify.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnmodify.Name = "btnmodify";
+            this.btnmodify.Text = "确认修改表名";
+            this.btnmodify.UseVisualStyleBackColor = false;
             // 
             // Sheet1
             // 
@@ -594,9 +682,19 @@ namespace sqlitemodel {
             this.btnstartCreate.BindingContext = this.BindingContext;
             this.label6.BindingContext = this.BindingContext;
             this.txtTableDBName.BindingContext = this.BindingContext;
-            this.btnModifyTable.BindingContext = this.BindingContext;
-            this.btnSaveTableModify.BindingContext = this.BindingContext;
-            this.button1.BindingContext = this.BindingContext;
+            this.cboavailabletemplelate.BindingContext = this.BindingContext;
+            this.btnselect.BindingContext = this.BindingContext;
+            this.btndeletetable.BindingContext = this.BindingContext;
+            this.cboToModifyTable.BindingContext = this.BindingContext;
+            this.txtmoname.BindingContext = this.BindingContext;
+            this.txtmodbname.BindingContext = this.BindingContext;
+            this.yuan.BindingContext = this.BindingContext;
+            this.label8.BindingContext = this.BindingContext;
+            this.label9.BindingContext = this.BindingContext;
+            this.label10.BindingContext = this.BindingContext;
+            this.txtmonewname.BindingContext = this.BindingContext;
+            this.txtmonewdbname.BindingContext = this.BindingContext;
+            this.btnmodify.BindingContext = this.BindingContext;
         }
         
         /// 

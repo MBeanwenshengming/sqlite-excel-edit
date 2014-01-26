@@ -14,17 +14,33 @@ using System.Data.SQLite;
 namespace sqlitemodel
 {
     public partial class Sheet3
-    {
-        public Microsoft.Office.Tools.Excel.ListObject sheet1ListObject;
+    {        
         public DataSet ds;
         public SQLiteDataAdapter adpater;
-        
+        public  Microsoft.Office.Tools.Excel.ListObject list1;
+
         private void Sheet3_Startup(object sender, System.EventArgs e)
         {
         }
 
         private void Sheet3_Shutdown(object sender, System.EventArgs e)
         {
+        }
+
+        public void clear()
+        {
+            if (list1 != null)
+            {
+                this.Controls.Remove(list1);
+            }
+            if (adpater != null)
+            {
+                adpater = null;
+            }
+            if (ds != null)
+            {
+                ds = null;
+            }
         }
         /*
  * 连接数据库的代码
@@ -53,7 +69,7 @@ namespace sqlitemodel
              */
 
             // Create a list object.
-            Microsoft.Office.Tools.Excel.ListObject list1 =
+            list1 =
                 this.Controls.AddListObject(
                 this.Range["A6", missing], strTableName);
 
@@ -62,6 +78,7 @@ namespace sqlitemodel
             list1.AutoSetDataBoundColumnHeaders = true;
             list1.DataSource = ds.Tables[0];
 
+            
             /*
             foreach (DataTable tb in ds.Tables)
             {
@@ -93,6 +110,10 @@ this.Shutdown += new System.EventHandler(this.Sheet3_Shutdown);
 
         private void button1_Click(object sender, EventArgs e)
         {
+            if (adpater == null || ds == null)
+            {
+                return;
+            }
             try
             {
                  SQLiteCommandBuilder builder = new SQLiteCommandBuilder(adpater);
@@ -100,12 +121,13 @@ this.Shutdown += new System.EventHandler(this.Sheet3_Shutdown);
                 adpater.UpdateCommand = builder.GetUpdateCommand();
                 adpater.Update(ds.Tables[0]);
                 ds.AcceptChanges();
+                MessageBox.Show("数据保存成功", "保存成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch(SystemException err)
             {
                 MessageBox.Show(err.Message, "保存失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            
         }
-
     }
 }

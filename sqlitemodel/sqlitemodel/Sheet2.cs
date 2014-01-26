@@ -71,8 +71,10 @@ namespace sqlitemodel
             SQLiteDataReader sqReader = sCommand.ExecuteReader();
             if (sqReader.HasRows)
             {
-                MessageBox.Show("已经存在映射类型，无法创建统一名称的映射类型", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                if (MessageBox.Show("已经存在映射类型，是否覆盖?", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Error) == DialogResult.Cancel)
+                {
+                    return;
+                }                
             }
             sqReader.Close();
 
@@ -117,40 +119,52 @@ namespace sqlitemodel
             //  保存到数据库中
             //  开启一个事务
             System.Data.SQLite.SQLiteTransaction trans = Globals.Sheet1.connection.BeginTransaction();
-
-            for (int i = 1; i < this.dgvMapInfoOfCurType.RowCount; ++i)
+            try
             {
-                string sInsertSql = "insert into mapdefine values('" + this.cboMapType.Text + "'";
-                for (int j = 1; j <= this.dgvMapInfoOfCurType.ColumnCount; ++j)
-                {   
-                    if (j == 1)
+                //  先 删除 原有的 数据 ，然后 保存 新的 
+                sCommand.CommandText = "delete from mapdefine where maptype='" + this.cboMapType.Text + "'";
+                sCommand.ExecuteNonQuery();
+
+                for (int i = 1; i < this.dgvMapInfoOfCurType.RowCount; ++i)
+                {
+                    string sInsertSql = "insert into mapdefine values('" + this.cboMapType.Text + "'";
+                    for (int j = 1; j <= this.dgvMapInfoOfCurType.ColumnCount; ++j)
                     {
-                        sInsertSql += "," + this.dgvMapInfoOfCurType.Rows[i - 1].Cells[j - 1].Value.ToString();
+                        if (j == 1)
+                        {
+                            sInsertSql += "," + this.dgvMapInfoOfCurType.Rows[i - 1].Cells[j - 1].Value.ToString();
+                        }
+                        else if (j == 4)
+                        {
+                            sInsertSql += "," + this.dgvMapInfoOfCurType.Rows[i - 1].Cells[j - 1].Value.ToString();
+                        }
+                        else
+                        {
+                            sInsertSql += ",'" + this.dgvMapInfoOfCurType.Rows[i - 1].Cells[j - 1].Value.ToString() + "'";
+                        }
                     }
-                    else if (j == 4)
-                    {
-                        sInsertSql += "," + this.dgvMapInfoOfCurType.Rows[i - 1].Cells[j - 1].Value.ToString();
-                    }
-                    else
-                    {
-                        sInsertSql += ",'" + this.dgvMapInfoOfCurType.Rows[i - 1].Cells[j - 1].Value.ToString() + "'";
-                    }
+                    sInsertSql += ")";
+
+                    sCommand.CommandText = sInsertSql;
+                    int nResult1 = sCommand.ExecuteNonQuery();
                 }
-                sInsertSql += ")";
-
-                sCommand.CommandText = sInsertSql;
-                int nResult1 = sCommand.ExecuteNonQuery();
+                //  提交事务
+                trans.Commit();
+                MessageBox.Show("保存成功", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            //  提交事务
-            trans.Commit();
-
+            catch (Exception error)
+            {
+                MessageBox.Show(error.ToString(), "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             //  sheet1可用映射类型重新获取
-            DataGridViewRow dr = new DataGridViewRow();
-            dr.CreateCells(Globals.Sheet1.dgvAvailableMapType);
-            dr.Cells[0].Value = this.cboMapType.Text;
+            //DataGridViewRow dr = new DataGridViewRow();
+            //dr.CreateCells(Globals.Sheet1.dgvAvailableMapType);
+            //dr.Cells[0].Value = this.cboMapType.Text;
 
-            Globals.Sheet1.dgvAvailableMapType.Rows.Add(dr);
+            //Globals.Sheet1.dgvAvailableMapType.Rows.Add(dr);
 
+            FreshAvailableMapType();
 
             this.dgvMapInfoOfCurType.ReadOnly = true;
             this.btnSaveToDB.Enabled = false;
@@ -198,6 +212,37 @@ namespace sqlitemodel
 
                 this.dgvMapInfoOfCurType.Rows.Add(dr);
             }           
+        }
+        public void ClearContent()
+        {
+            this.cboMapType.Items.Clear();
+            this.dgvMapInfoOfCurType.Rows.Clear();
+        }
+        private void FreshAvailableMapType()
+        {
+            this.cboMapType.Items.Clear();
+            Globals.Sheet1.dgvAvailableMapType.Rows.Clear();
+
+            SQLiteCommand sqliteCommand = Globals.Sheet1.connection.CreateCommand();
+
+            sqliteCommand.CommandText = "select maptype from mapdefine group by maptype";
+            SQLiteDataReader smapreader = sqliteCommand.ExecuteReader();
+            if (smapreader.HasRows)
+            {
+                while (smapreader.Read())
+                {
+                    string sName = smapreader.GetString(0);
+
+                    DataGridViewRow dr = new DataGridViewRow();
+                    dr.CreateCells(Globals.Sheet1.dgvAvailableMapType);
+                    dr.Cells[0].Value = sName;
+
+                    Globals.Sheet1.dgvAvailableMapType.Rows.Add(dr);
+
+                    this.cboMapType.Items.Add(sName);
+                }
+                //MessageBox.Show("可用映射已经装载成功", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }
