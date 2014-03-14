@@ -19,6 +19,16 @@ namespace sqlitemodel
         public SQLiteDataAdapter adpater;
         public  Microsoft.Office.Tools.Excel.ListObject list1;
 
+
+        private string[] m_strArrayFieldName;
+        private string[] m_strArrayFieldDBName;
+        private string[] m_strArrayMapTypeName;
+        private int m_nFieldCount;
+
+        private bool m_bIsLoading = false;
+        //  保存映射值
+        private Dictionary<string, Dictionary<int, string> > m_DicMapType = new Dictionary<string,Dictionary<int,string>>();
+
         private void Sheet3_Startup(object sender, System.EventArgs e)
         {
         }
@@ -41,56 +51,141 @@ namespace sqlitemodel
             {
                 ds = null;
             }
+            m_nFieldCount = 0;
+            m_strArrayFieldName = null;
+            m_strArrayFieldDBName = null;
+            m_strArrayMapTypeName = null;
+            m_DicMapType.Clear();
         }
         /*
  * 连接数据库的代码
  */
-        public void BindData(string strTableName)
+        public void BindData(string strTableName, int nFieldCount, string[] strArrayFieldName, string[] strArrayFieldDBName, string[] strArrayMapTypeName)
         {
-            // 创建连接数据库
-            /*
-            String connectionString = @"Data Source=D:\Dev\All-Totorial\SQLites\OrderWater.db;Version=3;";
-             * 
-             */
-            String sql = @"select * from [" + strTableName +"]";
-            //connection = new SQLiteConnection(connectionString);
-            //SQLiteCommand cmd = new SQLiteCommand(sql, connection);
-            //connection.Open();
+            m_bIsLoading = true;
+            m_nFieldCount                           = nFieldCount;
+            m_strArrayFieldName                 = strArrayFieldName;
+            m_strArrayFieldDBName             = strArrayFieldDBName;
+            m_strArrayMapTypeName          = strArrayMapTypeName;
+
+            //  确定listobject里面显示的列数
+            int nColumnCount = 0;
+            for (int i = 0; i < nFieldCount; ++i)
+            {
+                if (m_strArrayMapTypeName[i] != "")
+                {
+                    nColumnCount++;
+
+                    //  读取映射值
+                    SQLiteCommand sCommand = Globals.Sheet1.connection.CreateCommand();
+                    sCommand.CommandText = "select mapoldvalue, mapvalue from mapdefine where maptype='" + m_strArrayMapTypeName[i] + "'";
+            
+                    SQLiteDataReader reader = sCommand.ExecuteReader();
+
+                    Dictionary<int, string> dic = null;
+                    if (!m_DicMapType.ContainsKey(m_strArrayMapTypeName[i]))
+                    {
+                        dic = new Dictionary<int, string>();
+                        m_DicMapType.Add(m_strArrayMapTypeName[i], dic);
+                    }
+                    else
+                    {
+                        dic = m_DicMapType[m_strArrayMapTypeName[i]];
+                    }                   
+                  
+                    while (reader.Read())
+                    {                       
+                        int nOldValue = reader.GetInt32(0);
+                        string sValue = reader.GetString(1);
+                        dic[nOldValue] = sValue;
+                    }
+                    reader.Close();
+                }
+            }
+            //  RecordOrder字段不在定义表中出现
+            nColumnCount += m_nFieldCount + 1;
+            //  生成数据列的绑定字段字符串
+            string[] mappedColumn = new string[nColumnCount];
+            int nColumnIndex = 0;
+            mappedColumn[nColumnIndex] = "RecordOrder";
+            nColumnIndex++;
+
+            for (int i = 0; i < m_nFieldCount; ++i)
+            {              
+                    mappedColumn[nColumnIndex] = m_strArrayFieldDBName[i];
+                    nColumnIndex++;
+                    if (m_strArrayMapTypeName[i] != "")
+                    {
+                        mappedColumn[nColumnIndex] = "";
+                        nColumnIndex++;
+                    }      
+            }
+            
+            //  读取记录集
+            String sql = @"select * from [" + strTableName +"]"; 
             ds = new DataSet();
             adpater = new SQLiteDataAdapter(sql,  Globals.Sheet1.connection);
             adpater.Fill(ds);
-            /*
-            SQLiteCommandBuilder builder = new SQLiteCommandBuilder(adpater);
-            adpater.DeleteCommand = builder.GetDeleteCommand();
-            adpater.UpdateCommand = builder.GetUpdateCommand();
-            adpater.Update(ds.Tables[0]);
-            ds.AcceptChanges();
-             * 
-             */
 
-            // Create a list object.
+            int nRecordCount = ds.Tables[0].Rows.Count;
+
+            // 创建listobject对象
             list1 =
                 this.Controls.AddListObject(
                 this.Range["A6", missing], strTableName);
 
-            //System.Diagnostics.Trace.WriteLine("{1}", ds.Tables.Count.ToString());
-            // Bind the list object to the Customers table.
-            list1.AutoSetDataBoundColumnHeaders = true;
-            list1.DataSource = ds.Tables[0];
+
+            list1.AutoSetDataBoundColumnHeaders = false;
+
+            //  设置绑定字段
+            list1.SetDataBinding(ds, ds.Tables[0].TableName, mappedColumn);
+
 
             
-            /*
-            foreach (DataTable tb in ds.Tables)
+            //  设置列名
+            nColumnIndex = 1;
+            list1.ListColumns.Item[nColumnIndex].Name = "RecordOrder";
+            nColumnIndex++;
+
+            for (int i = 0; i < m_nFieldCount; ++i)
             {
-                System.Diagnostics.Debug.WriteLine(tb.ToString());
-                System.Diagnostics.Debug.WriteLine(tb.TableName);
-                foreach (DataColumn col in tb.Columns)
+                list1.ListColumns.Item[nColumnIndex].Name = m_strArrayFieldName[i];
+                nColumnIndex++;
+                if (m_strArrayMapTypeName[i] != "")
                 {
-                    System.Diagnostics.Debug.WriteLine(col.ColumnName);
+                    list1.ListColumns.Item[nColumnIndex].Name = m_strArrayFieldName[i] + "的映射值";
+                    nColumnIndex++;
+
+                    //  设置伙伴颜色
+                    char cColNameMap = (char)('A' + nColumnIndex - 2);
+                    char cColNameOrign = (char)('A' + nColumnIndex - 3);
+                    Excel.Range xRan;
+                    xRan = this.Range[cColNameMap.ToString() + Convert.ToString(6), cColNameMap.ToString() + Convert.ToString(nRecordCount + 6)];
+                    xRan.Interior.ColorIndex = 46;
+
+                    xRan = this.Range[cColNameOrign.ToString() + Convert.ToString(6), cColNameOrign.ToString() + Convert.ToString(nRecordCount + 6)];
+                    xRan.Interior.ColorIndex = 47;
+
+                    //  更新内容
+                    Dictionary<int, string> dic = m_DicMapType[m_strArrayMapTypeName[i]];
+                    if (dic != null)
+                    {
+                        for (int nRIndex = 0; nRIndex < ds.Tables[0].Rows.Count; ++nRIndex)
+                        {                            
+                            string strOrginValue = ((Excel.Range)this.Cells[nRIndex + 7, nColumnIndex - 2]).Text;
+                            int nValue = Convert.ToInt32(strOrginValue);
+
+                            string sMappedValue = "错误映射类型";
+                            if (dic.ContainsKey(nValue))
+                            {
+                                sMappedValue = dic[nValue];
+                            }
+                            this.Cells[nRIndex + 7, nColumnIndex - 1] = sMappedValue;
+                        }
+                    }
                 }
             }
-             */
-            //list1.DataMember = "All_Customer";
+            m_bIsLoading = false;
         }
         #region VSTO 设计器生成的代码
 
@@ -100,9 +195,10 @@ namespace sqlitemodel
         /// </summary>
         private void InternalStartup()
         {
-this.button1.Click += new System.EventHandler(this.button1_Click);
-this.Startup += new System.EventHandler(this.Sheet3_Startup);
-this.Shutdown += new System.EventHandler(this.Sheet3_Shutdown);
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.Startup += new System.EventHandler(this.Sheet3_Startup);
+            this.Shutdown += new System.EventHandler(this.Sheet3_Shutdown);
+            this.Change += new Microsoft.Office.Interop.Excel.DocEvents_ChangeEventHandler(this.Sheet3_Change);
 
         }
 
@@ -114,20 +210,30 @@ this.Shutdown += new System.EventHandler(this.Sheet3_Shutdown);
             {
                 return;
             }
+            SQLiteTransaction sqTrans = Globals.Sheet1.connection.BeginTransaction();
             try
-            {
+            {                               
                  SQLiteCommandBuilder builder = new SQLiteCommandBuilder(adpater);
                 adpater.DeleteCommand = builder.GetDeleteCommand();
                 adpater.UpdateCommand = builder.GetUpdateCommand();
                 adpater.Update(ds.Tables[0]);
                 ds.AcceptChanges();
+                sqTrans.Commit();
                 MessageBox.Show("数据保存成功", "保存成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch(SystemException err)
             {
+                sqTrans.Rollback();
                 MessageBox.Show(err.Message, "保存失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            
+            }            
         }
+
+        private void Sheet3_Change(Excel.Range Target)
+        {
+            if (!m_bIsLoading)
+            {
+                MessageBox.Show("sf");
+            }
+        }        
     }
 }
