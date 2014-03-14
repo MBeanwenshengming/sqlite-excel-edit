@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -527,16 +528,21 @@ namespace sqlitemodel
             this.dgvTableDefine.Rows.Clear();
             SQLiteCommand sqCommand = this.connection.CreateCommand();
             sqCommand.CommandText = "select * from tabledefine where tablename='" + this.cboTable.Text + "'";
-            SQLiteDataReader sqReader =  sqCommand.ExecuteReader();
+            SQLiteDataReader sqReader =  sqCommand.ExecuteReader();        
 
+            ArrayList lstFieldName                 = new ArrayList();
+            ArrayList lstFieldDBName             = new ArrayList();
+            ArrayList lstFieldMapTypeName   = new ArrayList();
+            
+            int nArrayIndex = 0;
             while (sqReader.Read())
-            {
+            { 
                 this.txtNewTableName.Text = sqReader.GetValue(1).ToString();
                 this.txtTableDBName.Text = sqReader.GetValue(0).ToString();
 
                 DataGridViewRow dr = new DataGridViewRow();
                 dr.CreateCells(this.dgvTableDefine);
-                dr.Cells[0].Value = sqReader.GetValue(2).ToString();
+                dr.Cells[0].Value = sqReader.GetValue(2).ToString();                
                 dr.Cells[1].Value = sqReader.GetValue(5).ToString();
                 dr.Cells[2].Value = sqReader.GetValue(3).ToString();
                 dr.Cells[3].Value = sqReader.GetValue(4).ToString();
@@ -547,12 +553,17 @@ namespace sqlitemodel
                 //{
                 //    Globals.Sheet2.cboMapType.Items.Add(dr.Cells[4].Value);
                 //}
+                lstFieldName.Add(dr.Cells[0].Value.ToString());
+                lstFieldDBName.Add(dr.Cells[1].Value.ToString());
+                lstFieldMapTypeName.Add(dr.Cells[4].Value.ToString());
+                nArrayIndex++;
+
                 this.dgvTableDefine.Rows.Add(dr);
             }
             sqReader.Close();
 
             Globals.Sheet3.clear();
-            Globals.Sheet3.BindData(this.txtTableDBName.Text);
+            Globals.Sheet3.BindData(this.txtTableDBName.Text, nArrayIndex, (string[])lstFieldName.ToArray(typeof(string)), (string[])lstFieldDBName.ToArray(typeof(string)), (string[])lstFieldMapTypeName.ToArray(typeof(string)));         
         }
 
         private void button1_Click(object sender, EventArgs e)
