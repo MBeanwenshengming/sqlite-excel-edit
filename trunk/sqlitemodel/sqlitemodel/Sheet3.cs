@@ -36,8 +36,8 @@ namespace sqlitemodel
         //  保存映射值
         private Dictionary<string, Dictionary<int, string> > m_DicMapType = new Dictionary<string,Dictionary<int,string>>();
 
-        private Dictionary<string, _Map_Col_Info> m_OrginToMapInfo = new Dictionary<string,_Map_Col_Info>();     //  原始值列对应信息
-        //private Dictionary<string, _Map_Col_Info> m_MapToMapInfo = new Dictionary<string,_Map_Col_Info>();       //  映射值对应信息
+        //private Dictionary<string, _Map_Col_Info> m_OrginToMapInfo = new Dictionary<string,_Map_Col_Info>();     //  原始值列对应信息
+        private Dictionary<string, _Map_Col_Info> m_MapToMapInfo = new Dictionary<string,_Map_Col_Info>();       //  映射值对应信息
 
         private void Sheet3_Startup(object sender, System.EventArgs e)
         {
@@ -66,8 +66,8 @@ namespace sqlitemodel
             m_strArrayFieldDBName = null;
             m_strArrayMapTypeName = null;
             m_DicMapType.Clear();
-            m_OrginToMapInfo.Clear();
-            //m_MapToMapInfo.Clear();            
+            //m_OrginToMapInfo.Clear();
+            m_MapToMapInfo.Clear();            
         }
 
 
@@ -207,7 +207,7 @@ namespace sqlitemodel
 
                 if (m_strArrayMapTypeName[i] != "")
                 {
-                    string sOrginValue = "";
+                    //string sOrginValue = "";
                     string sMapValue = "";
 
                     list1.ListColumns.Item[nColumnIndex].Name = m_strArrayFieldName[i] + "的映射值";
@@ -216,30 +216,30 @@ namespace sqlitemodel
                      Dictionary<int, string> dic = m_DicMapType[m_strArrayMapTypeName[i]];
                      if (dic != null)
                      {
-                         int[] nkeys1 = dic.Keys.ToArray<int>();
-                         for (int m = 0; m < nkeys1.Length; ++m)
-                         {
-                             if (sOrginValue == "")
-                             {
-                                 sOrginValue += nkeys1[m].ToString();
-                             }
-                             else
-                             {
-                                 sOrginValue += "," + nkeys1[m].ToString();
-                             }
-                         }
-                         //string[] sMapValue1 = dic.Values.ToArray<string>();
-                         //for (int m = 0; m < sMapValue1.Length; ++m)
+                         //int[] nkeys1 = dic.Keys.ToArray<int>();
+                         //for (int m = 0; m < nkeys1.Length; ++m)
                          //{
-                         //    if (sMapValue == "")
+                         //    if (sOrginValue == "")
                          //    {
-                         //        sMapValue += sMapValue1[i];
+                         //        sOrginValue += nkeys1[m].ToString();
                          //    }
                          //    else
                          //    {
-                         //        sMapValue += "," + sMapValue1[i];
+                         //        sOrginValue += "," + nkeys1[m].ToString();
                          //    }
                          //}
+                         string[] sMapValue1 = dic.Values.ToArray<string>();
+                         for (int m = 0; m < sMapValue1.Length; ++m)
+                         {
+                             if (sMapValue == "")
+                             {
+                                 sMapValue += sMapValue1[m];
+                             }
+                             else
+                             {
+                                 sMapValue += "," + sMapValue1[m];
+                             }
+                         }
                      }
 
                     //  设置伙伴颜色   
@@ -249,24 +249,24 @@ namespace sqlitemodel
                     //char cColNameOrign = (char)('A' + nColumnIndex - 3);
 
                     Excel.Range xRan;
-                    xRan = this.Range[sColNameMap + Convert.ToString(6), sColNameMap + Convert.ToString(nRecordCount + 6)];
+                    xRan = this.Range[sColNameMap + Convert.ToString(6), sColNameMap + Convert.ToString(nRecordCount + 7)];
                     xRan.Interior.ColorIndex = 46;
 
-                    //MessageBox.Show("解决0x800A03EC错误，目前没有找到可以退出编辑模式的方法，只能出这个提示框，才能正确设置！");
-                    //xRan.Validation.Delete();
-                    //xRan.Validation.Add(Excel.XlDVType.xlValidateList, Excel.XlDVAlertStyle.xlValidAlertInformation, Excel.XlFormatConditionOperator.xlBetween, sMapValue, System.Type.Missing);
-                    //xRan.Validation.IgnoreBlank = true;
-                    //xRan.Validation.InCellDropdown = true;
-                    //Application.SendKeys("{ESC}", true);
+                    MessageBox.Show("解决0x800A03EC错误，目前没有找到可以退出编辑模式的方法，只能出这个提示框，才能正确设置！");
+                    xRan.Validation.Delete();
+                    xRan.Validation.Add(Excel.XlDVType.xlValidateList, Excel.XlDVAlertStyle.xlValidAlertInformation, Excel.XlFormatConditionOperator.xlBetween, sMapValue, System.Type.Missing);
+                    xRan.Validation.IgnoreBlank = true;
+                    xRan.Validation.InCellDropdown = true;
+                    
 
                     xRan = this.Range[sColNameOrign + Convert.ToString(6), sColNameOrign + Convert.ToString(nRecordCount + 7)];
                     xRan.Interior.ColorIndex = 47;
 
-                    MessageBox.Show("解决0x800A03EC错误，目前没有找到可以退出编辑模式的方法，只能出这个提示框，才能正确设置！");
-                    xRan.Validation.Delete();
-                    xRan.Validation.Add(Excel.XlDVType.xlValidateList, Excel.XlDVAlertStyle.xlValidAlertInformation, Excel.XlFormatConditionOperator.xlBetween, sOrginValue, System.Type.Missing);
-                    xRan.Validation.IgnoreBlank = true;
-                    xRan.Validation.InCellDropdown = true;      
+                    //MessageBox.Show("解决0x800A03EC错误，目前没有找到可以退出编辑模式的方法，只能出这个提示框，才能正确设置！");
+                    //xRan.Validation.Delete();
+                    //xRan.Validation.Add(Excel.XlDVType.xlValidateList, Excel.XlDVAlertStyle.xlValidAlertInformation, Excel.XlFormatConditionOperator.xlBetween, sOrginValue, System.Type.Missing);
+                    //xRan.Validation.IgnoreBlank = true;
+                    //xRan.Validation.InCellDropdown = true;      
                   
                     
                     _Map_Col_Info mci;
@@ -274,7 +274,7 @@ namespace sqlitemodel
                     mci.sColMap = sColNameMap;
                     mci.sMapTypeName = m_strArrayMapTypeName[i];
 
-                    m_OrginToMapInfo.Add(sColNameOrign, mci);
+                    m_MapToMapInfo.Add(sColNameMap, mci);
                     //m_MapToMapInfo.Add(sColNameMap, mci);
 
                     //  更新内容
@@ -367,13 +367,13 @@ namespace sqlitemodel
             reader.Close();
 
             //  更新数据有效性信息         
-            foreach (KeyValuePair<string, _Map_Col_Info> keyValues in m_OrginToMapInfo)
+            foreach (KeyValuePair<string, _Map_Col_Info> keyValues in m_MapToMapInfo)
             {
                 string sColName = keyValues.Key;
                 if (keyValues.Value.sMapTypeName == strMapTypeName)
                 {
                     string sOrginValue = "";
-                    int[] nkeys1 = dic.Keys.ToArray<int>();
+                    string[] nkeys1 = dic.Values.ToArray<string>();
                     for (int m = 0; m < nkeys1.Length; ++m)
                     {
                         if (sOrginValue == "")
@@ -409,20 +409,24 @@ namespace sqlitemodel
                     int nRow = rng.Row;
 
                     string sColName = NumbertoString(nCol);
-                    if (m_OrginToMapInfo.ContainsKey(sColName))
-                    {        
-                        _Map_Col_Info sMapColInfo = m_OrginToMapInfo[sColName];
+                    if (m_MapToMapInfo.ContainsKey(sColName))
+                    {
+                        _Map_Col_Info sMapColInfo = m_MapToMapInfo[sColName];
                         if (m_DicMapType.ContainsKey(sMapColInfo.sMapTypeName))
                         {
                             Dictionary<int, string> dic = m_DicMapType[sMapColInfo.sMapTypeName];
 
-                            int nValue = (int)rng.Value2;
-                            if (dic.ContainsKey(nValue))
+                            string sValue = (string)rng.Value2;
+                            foreach (KeyValuePair<int, string> kvalue in dic)
                             {
-                                int nColToModify = StringToNumber(sMapColInfo.sColMap);
-                                Excel.Range rngToModify = this.Cells[nRow, nColToModify];
-                                rngToModify.Value2 = dic[nValue];
-                            }
+                                if (kvalue.Value == sValue)
+                                {
+                                    int nColToModify = StringToNumber(sMapColInfo.sColOrgin);
+                                    Excel.Range rngToModify = this.Cells[nRow, nColToModify];
+                                    rngToModify.Value2 = kvalue.Key;
+                                    break;
+                                }
+                            }            
                         }
                         continue;
                     }
