@@ -50,6 +50,7 @@ namespace sqlitemodel
             this.btndeletetable.Click += new System.EventHandler(this.btndeletetable_Click);
             this.cboToModifyTable.SelectedIndexChanged += new System.EventHandler(this.cboToModifyTable_SelectedIndexChanged);
             this.btnmodify.Click += new System.EventHandler(this.btnmodify_Click);
+            this.btnRelease.Click += new System.EventHandler(this.btnRelease_Click);
             this.Startup += new System.EventHandler(this.Sheet1_Startup);
             this.Shutdown += new System.EventHandler(this.Sheet1_Shutdown);
 
@@ -832,6 +833,31 @@ namespace sqlitemodel
             {
                 sqTrans.Rollback();
                 MessageBox.Show(error.ToString(), "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnRelease_Click(object sender, EventArgs e)
+        {
+            if (this.connection.State != ConnectionState.Open)
+            {
+                MessageBox.Show("发布数据库之前，请先打开需要发布的数据库！！");
+                return;
+            }
+            if (MessageBox.Show("确定要发布数据库？", "提示!!", MessageBoxButtons.YesNo, MessageBoxIcon.Information) != DialogResult.Yes)
+            {
+                return;
+            }
+
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Title = "输入要发布到数据库位置和文件名";
+            saveFileDialog.InitialDirectory = "c://";
+            saveFileDialog.Filter = "所有文件|*.*";
+            saveFileDialog.RestoreDirectory = true;
+            saveFileDialog.FilterIndex = 1;
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string fName = openFileDialog.FileName;
             }
         }
     }
