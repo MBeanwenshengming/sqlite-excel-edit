@@ -151,6 +151,8 @@ namespace sqlitemodel
                 //  提交事务
                 trans.Commit();
                 MessageBox.Show("保存成功", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                Globals.Sheet3.UpdateMapTypeDefine(this.cboMapType.Text);
             }
             catch (Exception error)
             {

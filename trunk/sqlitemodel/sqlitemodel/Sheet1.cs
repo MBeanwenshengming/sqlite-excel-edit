@@ -311,6 +311,26 @@ namespace sqlitemodel
         }
         private bool CheckDBTableExist(string sTableName, string sDBTableName)
         {
+            SQLiteCommand sCommand = Globals.Sheet1.connection.CreateCommand();
+            sCommand.CommandText = "select tablename from tabledefine where tablename='" + sTableName + "'";
+
+            SQLiteDataReader reader = sCommand.ExecuteReader();
+
+            if (reader.Read())
+            {
+                reader.Close();
+                return true;
+            }            
+            reader.Close();
+
+            sCommand.CommandText = "select dbtablename from tabledefine where dbtablename='" + sDBTableName + "'";
+            reader = sCommand.ExecuteReader();
+            if (reader.Read())
+            {
+                reader.Close();
+                return true;
+            }
+            reader.Close();
             return false;
         }
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -489,6 +509,8 @@ namespace sqlitemodel
                 MessageBox.Show("请输入映射名称", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
+            this.dgvMapTypeInfo.Rows.Clear();
+
             SQLiteCommand sCommand = this.connection.CreateCommand();
             sCommand.CommandText = "select mapoldvalue, mapvalue, mapdesc, RecordOrder from mapdefine where maptype='" + this.txtMapType.Text + "'";
             

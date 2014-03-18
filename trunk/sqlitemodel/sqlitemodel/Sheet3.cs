@@ -14,7 +14,14 @@ using System.Data.SQLite;
 namespace sqlitemodel
 {
     public partial class Sheet3
-    {        
+    {
+        struct _Map_Col_Info
+        {
+            public string sColOrgin;
+            public string sColMap;
+            public string sMapTypeName;           
+        };
+        
         public DataSet ds;
         public SQLiteDataAdapter adpater;
         public  Microsoft.Office.Tools.Excel.ListObject list1;
@@ -28,6 +35,9 @@ namespace sqlitemodel
         private bool m_bIsLoading = false;
         //  保存映射值
         private Dictionary<string, Dictionary<int, string> > m_DicMapType = new Dictionary<string,Dictionary<int,string>>();
+
+        private Dictionary<string, _Map_Col_Info> m_OrginToMapInfo = new Dictionary<string,_Map_Col_Info>();     //  原始值列对应信息
+        //private Dictionary<string, _Map_Col_Info> m_MapToMapInfo = new Dictionary<string,_Map_Col_Info>();       //  映射值对应信息
 
         private void Sheet3_Startup(object sender, System.EventArgs e)
         {
@@ -56,7 +66,45 @@ namespace sqlitemodel
             m_strArrayFieldDBName = null;
             m_strArrayMapTypeName = null;
             m_DicMapType.Clear();
+            m_OrginToMapInfo.Clear();
+            //m_MapToMapInfo.Clear();            
         }
+
+
+        // Convert A, B, .... AAA, AAB to number 1,2, ...          
+        int StringToNumber(string s)
+        {
+            int r = 0;
+            for (int i = 0; i < s.Length; i++)
+            {
+                r = r * 26 + s[i] - 'A' + 1;
+            }
+            return r;
+        }
+
+        // Convert number 1, 2, ... to string A, B, ...   
+        static string NumbertoString(int n)
+        {
+            string s = "";     // result   
+            int r = 0;         // remainder   
+
+            while (n != 0)
+            {
+                r = n % 26;
+                char ch = ' ';
+                if (r == 0)
+                    ch = 'Z';
+                else
+                    ch = (char)(r - 1 + 'A');
+                s = ch.ToString() + s;
+                if (s[0] == 'Z')
+                    n = n / 26 - 1;
+                else
+                    n /= 26;
+            }
+            return s;
+        } 
+
         /*
  * 连接数据库的代码
  */
@@ -144,30 +192,93 @@ namespace sqlitemodel
             
             //  设置列名
             nColumnIndex = 1;
+            this.Range[NumbertoString(nColumnIndex) + Convert.ToString(1), System.Type.Missing].ColumnWidth = 25;
+
             list1.ListColumns.Item[nColumnIndex].Name = "RecordOrder";
             nColumnIndex++;
+            this.Range[NumbertoString(nColumnIndex) + Convert.ToString(1), System.Type.Missing].ColumnWidth = 25;
 
             for (int i = 0; i < m_nFieldCount; ++i)
-            {
+            {                
                 list1.ListColumns.Item[nColumnIndex].Name = m_strArrayFieldName[i];
+                this.Range[NumbertoString(nColumnIndex) + Convert.ToString(1), System.Type.Missing].ColumnWidth = 25;
                 nColumnIndex++;
+                
+
                 if (m_strArrayMapTypeName[i] != "")
                 {
-                    list1.ListColumns.Item[nColumnIndex].Name = m_strArrayFieldName[i] + "的映射值";
-                    nColumnIndex++;
+                    string sOrginValue = "";
+                    string sMapValue = "";
 
-                    //  设置伙伴颜色
-                    char cColNameMap = (char)('A' + nColumnIndex - 2);
-                    char cColNameOrign = (char)('A' + nColumnIndex - 3);
+                    list1.ListColumns.Item[nColumnIndex].Name = m_strArrayFieldName[i] + "的映射值";
+                    this.Range[NumbertoString(nColumnIndex) + Convert.ToString(1), System.Type.Missing].ColumnWidth = 25;
+                    nColumnIndex++;
+                     Dictionary<int, string> dic = m_DicMapType[m_strArrayMapTypeName[i]];
+                     if (dic != null)
+                     {
+                         int[] nkeys1 = dic.Keys.ToArray<int>();
+                         for (int m = 0; m < nkeys1.Length; ++m)
+                         {
+                             if (sOrginValue == "")
+                             {
+                                 sOrginValue += nkeys1[m].ToString();
+                             }
+                             else
+                             {
+                                 sOrginValue += "," + nkeys1[m].ToString();
+                             }
+                         }
+                         //string[] sMapValue1 = dic.Values.ToArray<string>();
+                         //for (int m = 0; m < sMapValue1.Length; ++m)
+                         //{
+                         //    if (sMapValue == "")
+                         //    {
+                         //        sMapValue += sMapValue1[i];
+                         //    }
+                         //    else
+                         //    {
+                         //        sMapValue += "," + sMapValue1[i];
+                         //    }
+                         //}
+                     }
+
+                    //  设置伙伴颜色   
+                    string sColNameMap = NumbertoString(nColumnIndex - 1);
+                    string sColNameOrign = NumbertoString(nColumnIndex - 2);
+                    //char cColNameMap = (char)('A' + nColumnIndex - 2);
+                    //char cColNameOrign = (char)('A' + nColumnIndex - 3);
+
                     Excel.Range xRan;
-                    xRan = this.Range[cColNameMap.ToString() + Convert.ToString(6), cColNameMap.ToString() + Convert.ToString(nRecordCount + 6)];
+                    xRan = this.Range[sColNameMap + Convert.ToString(6), sColNameMap + Convert.ToString(nRecordCount + 6)];
                     xRan.Interior.ColorIndex = 46;
 
-                    xRan = this.Range[cColNameOrign.ToString() + Convert.ToString(6), cColNameOrign.ToString() + Convert.ToString(nRecordCount + 6)];
+                    //MessageBox.Show("解决0x800A03EC错误，目前没有找到可以退出编辑模式的方法，只能出这个提示框，才能正确设置！");
+                    //xRan.Validation.Delete();
+                    //xRan.Validation.Add(Excel.XlDVType.xlValidateList, Excel.XlDVAlertStyle.xlValidAlertInformation, Excel.XlFormatConditionOperator.xlBetween, sMapValue, System.Type.Missing);
+                    //xRan.Validation.IgnoreBlank = true;
+                    //xRan.Validation.InCellDropdown = true;
+                    //Application.SendKeys("{ESC}", true);
+
+                    xRan = this.Range[sColNameOrign + Convert.ToString(6), sColNameOrign + Convert.ToString(nRecordCount + 7)];
                     xRan.Interior.ColorIndex = 47;
 
+                    MessageBox.Show("解决0x800A03EC错误，目前没有找到可以退出编辑模式的方法，只能出这个提示框，才能正确设置！");
+                    xRan.Validation.Delete();
+                    xRan.Validation.Add(Excel.XlDVType.xlValidateList, Excel.XlDVAlertStyle.xlValidAlertInformation, Excel.XlFormatConditionOperator.xlBetween, sOrginValue, System.Type.Missing);
+                    xRan.Validation.IgnoreBlank = true;
+                    xRan.Validation.InCellDropdown = true;      
+                  
+                    
+                    _Map_Col_Info mci;
+                    mci.sColOrgin = sColNameOrign;
+                    mci.sColMap = sColNameMap;
+                    mci.sMapTypeName = m_strArrayMapTypeName[i];
+
+                    m_OrginToMapInfo.Add(sColNameOrign, mci);
+                    //m_MapToMapInfo.Add(sColNameMap, mci);
+
                     //  更新内容
-                    Dictionary<int, string> dic = m_DicMapType[m_strArrayMapTypeName[i]];
+                    //Dictionary<int, string> dic = m_DicMapType[m_strArrayMapTypeName[i]];
                     if (dic != null)
                     {
                         for (int nRIndex = 0; nRIndex < ds.Tables[0].Rows.Count; ++nRIndex)
@@ -185,6 +296,8 @@ namespace sqlitemodel
                     }
                 }
             }
+            //this.Range[NumbertoString(nColumnIndex) + Convert.ToString(1), System.Type.Missing].ColumnWidth = 25;
+            MessageBox.Show("数据装载成功！！");
             m_bIsLoading = false;
         }
         #region VSTO 设计器生成的代码
@@ -227,12 +340,97 @@ namespace sqlitemodel
                 MessageBox.Show(err.Message, "保存失败", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }            
         }
+        //  sheet2更新完之后，更新这里存在的映射
+        public void UpdateMapTypeDefine(string strMapTypeName)
+        {
+            if (!m_DicMapType.ContainsKey(strMapTypeName))
+            {
+                return;
+            }
+
+            //  更新映射信息
+            Dictionary<int, string> dic = m_DicMapType[strMapTypeName];
+            dic.Clear();
+
+
+            SQLiteCommand sCommand = Globals.Sheet1.connection.CreateCommand();
+            sCommand.CommandText = "select mapoldvalue, mapvalue from mapdefine where maptype='" + strMapTypeName + "'";
+
+            SQLiteDataReader reader = sCommand.ExecuteReader();       
+
+            while (reader.Read())
+            {
+                int nOldValue = reader.GetInt32(0);
+                string sValue = reader.GetString(1);
+                dic[nOldValue] = sValue;
+            }
+            reader.Close();
+
+            //  更新数据有效性信息         
+            foreach (KeyValuePair<string, _Map_Col_Info> keyValues in m_OrginToMapInfo)
+            {
+                string sColName = keyValues.Key;
+                if (keyValues.Value.sMapTypeName == strMapTypeName)
+                {
+                    string sOrginValue = "";
+                    int[] nkeys1 = dic.Keys.ToArray<int>();
+                    for (int m = 0; m < nkeys1.Length; ++m)
+                    {
+                        if (sOrginValue == "")
+                        {
+                            sOrginValue += nkeys1[m].ToString();
+                        }
+                        else
+                        {
+                            sOrginValue += "," + nkeys1[m].ToString();
+                        }
+                    }
+
+
+                    Excel.Range xRan;
+                    xRan = this.Range[sColName + Convert.ToString(6), sColName + Convert.ToString(this.list1.ListRows.Count + 7)];                    
+
+                    MessageBox.Show("解决0x800A03EC错误，目前没有找到可以退出编辑模式的方法，只能出这个提示框，才能正确设置！");
+                    xRan.Validation.Delete();
+                    xRan.Validation.Add(Excel.XlDVType.xlValidateList, Excel.XlDVAlertStyle.xlValidAlertInformation, Excel.XlFormatConditionOperator.xlBetween, sOrginValue, System.Type.Missing);
+                    xRan.Validation.IgnoreBlank = true;
+                    xRan.Validation.InCellDropdown = true;      
+                }
+            }
+        }
 
         private void Sheet3_Change(Excel.Range Target)
         {
             if (!m_bIsLoading)
             {
-                MessageBox.Show("sf");
+                foreach (Excel.Range rng in Target)
+                {
+                    int nCol = rng.Column;
+                    int nRow = rng.Row;
+
+                    string sColName = NumbertoString(nCol);
+                    if (m_OrginToMapInfo.ContainsKey(sColName))
+                    {        
+                        _Map_Col_Info sMapColInfo = m_OrginToMapInfo[sColName];
+                        if (m_DicMapType.ContainsKey(sMapColInfo.sMapTypeName))
+                        {
+                            Dictionary<int, string> dic = m_DicMapType[sMapColInfo.sMapTypeName];
+
+                            int nValue = (int)rng.Value2;
+                            if (dic.ContainsKey(nValue))
+                            {
+                                int nColToModify = StringToNumber(sMapColInfo.sColMap);
+                                Excel.Range rngToModify = this.Cells[nRow, nColToModify];
+                                rngToModify.Value2 = dic[nValue];
+                            }
+                        }
+                        continue;
+                    }
+                    
+                    //MessageBox.Show(
+                    //   rng.get_Address(System.Type.Missing, System.Type.Missing,
+                    //   Excel.XlReferenceStyle.xlA1, System.Type.Missing, System.Type.Missing));
+                }
             }
         }        
     }
