@@ -857,7 +857,80 @@ namespace sqlitemodel
             saveFileDialog.FilterIndex = 1;
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                string fName = openFileDialog.FileName;
+                string fName = saveFileDialog.FileName;
+
+                //  创建一个数据库
+                System.Data.SQLite.SQLiteConnection.CreateFile(fName);
+
+                //  将该新的数据库attach到当前连接，以便可以访问
+                SQLiteCommand sqCommand = this.connection.CreateCommand();
+                sqCommand.CommandText = "attach '" + fName + "' as ReleaseDB";
+
+                sqCommand.ExecuteNonQuery();
+
+
+                ArrayList tableNamelist = new ArrayList();
+                //  查询出所有的数据表
+                sqCommand.CommandText = "select dbtablename from tabledefine group by dbtablename";
+                SQLiteDataReader sqReader = sqCommand.ExecuteReader();
+                while (sqReader.Read())
+                {
+                    string sTableName = sqReader.GetString(0);
+                    tableNamelist.Add(sTableName);
+                }
+                sqReader.Close();
+
+                //  在ReleaseDB中创建所有的数据表
+                for (int i = 0; i < tableNamelist.Count; ++i)
+                {
+                    ArrayList toCreateIndexFieldName = new ArrayList();
+
+                    string sTableName = (string)tableNamelist[i];
+                    string sTableCreateSql = "create table ReleaseDB." + sTableName + " (";
+                    string sCopyDataSql = "insert into ReleaseDB." + sTableName + " select ";
+                    sqCommand.CommandText = "select fieldtype,dbfieldname,iscreateindex from tabledefine where dbtablename='" + sTableName + "'";
+                    sqReader = sqCommand.ExecuteReader();
+                    bool bFirstAdd = true;
+                    while (sqReader.Read())
+                    {
+                        if (bFirstAdd)
+                        {
+                            sTableCreateSql += sqReader.GetString(1) + " " + sqReader.GetString(0) + " not null ";
+                            sCopyDataSql += sqReader.GetString(1);
+                            bFirstAdd = false;
+                        }
+                        else
+                        {
+                            sTableCreateSql += ", " + sqReader.GetString(1) + " " + sqReader.GetString(0) + " not null ";
+                            sCopyDataSql += "," + sqReader.GetString(1);
+                        }
+                        int nCreateIndex = sqReader.GetInt32(2);
+                        if (nCreateIndex == 1)
+                        {
+                            toCreateIndexFieldName.Add(sqReader.GetString(1));
+                        }                        
+                    }
+                    sqReader.Close();
+
+                    sTableCreateSql += ")";
+                    sCopyDataSql += " from " + sTableName;
+
+                    sqCommand.CommandText = sTableCreateSql;
+                    sqCommand.ExecuteNonQuery();
+
+                    //  创建索引
+                    for (int index = 0; index < toCreateIndexFieldName.Count; ++index)
+                    {
+                        string sToCreateIndexFieldName = (string)toCreateIndexFieldName[index];
+                        sqCommand.CommandText = "create index ReleaseDB." + sTableName + "_" + sToCreateIndexFieldName + " on " + sTableName + "(" + sToCreateIndexFieldName + ")";
+                        sqCommand.ExecuteNonQuery();
+                    }
+
+                    //  拷贝数据
+                    sqCommand.CommandText = sCopyDataSql;
+                    sqCommand.ExecuteNonQuery();
+                }
+                MessageBox.Show("数据发布成功!!!  数据库位置为" + fName, "发布成功！", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }
