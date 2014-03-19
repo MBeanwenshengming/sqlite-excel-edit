@@ -1,4 +1,30 @@
-﻿using System;
+﻿/*
+The MIT License (MIT)
+
+Copyright (c) <2013-2020> <wenshengming zhujiangping>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+.
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -49,6 +75,24 @@ namespace sqlitemodel
 
         public void clear()
         {
+            //  移除Valid信息
+            foreach (KeyValuePair<string, _Map_Col_Info> keyValues in m_MapToMapInfo)
+            {
+                string sColName = keyValues.Key;
+                string sColNameOrgin = keyValues.Value.sColOrgin;
+
+                Excel.Range xRan;
+                xRan = this.Range[sColName + Convert.ToString(7), sColName + Convert.ToString(this.list1.ListRows.Count + 7)];
+
+                MessageBox.Show("解决0x800A03EC错误，目前没有找到可以退出编辑模式的方法，只能出这个提示框，才能正确设置！");
+                xRan.Validation.Delete();
+                xRan.Interior.ColorIndex = 0;
+
+
+                xRan = this.Range[sColNameOrgin + Convert.ToString(7), sColNameOrgin + Convert.ToString(this.list1.ListRows.Count + 7)];
+                xRan.Interior.ColorIndex = 0;
+            }
+
             if (list1 != null)
             {
                 this.Controls.Remove(list1);
@@ -249,7 +293,7 @@ namespace sqlitemodel
                     //char cColNameOrign = (char)('A' + nColumnIndex - 3);
 
                     Excel.Range xRan;
-                    xRan = this.Range[sColNameMap + Convert.ToString(6), sColNameMap + Convert.ToString(nRecordCount + 7)];
+                    xRan = this.Range[sColNameMap + Convert.ToString(7), sColNameMap + Convert.ToString(nRecordCount + 7)];
                     xRan.Interior.ColorIndex = 46;
 
                     MessageBox.Show("解决0x800A03EC错误，目前没有找到可以退出编辑模式的方法，只能出这个提示框，才能正确设置！");
@@ -259,7 +303,7 @@ namespace sqlitemodel
                     xRan.Validation.InCellDropdown = true;
                     
 
-                    xRan = this.Range[sColNameOrign + Convert.ToString(6), sColNameOrign + Convert.ToString(nRecordCount + 7)];
+                    xRan = this.Range[sColNameOrign + Convert.ToString(7), sColNameOrign + Convert.ToString(nRecordCount + 7)];
                     xRan.Interior.ColorIndex = 47;
 
                     //MessageBox.Show("解决0x800A03EC错误，目前没有找到可以退出编辑模式的方法，只能出这个提示框，才能正确设置！");
@@ -388,7 +432,7 @@ namespace sqlitemodel
 
 
                     Excel.Range xRan;
-                    xRan = this.Range[sColName + Convert.ToString(6), sColName + Convert.ToString(this.list1.ListRows.Count + 7)];                    
+                    xRan = this.Range[sColName + Convert.ToString(7), sColName + Convert.ToString(this.list1.ListRows.Count + 7)];                    
 
                     MessageBox.Show("解决0x800A03EC错误，目前没有找到可以退出编辑模式的方法，只能出这个提示框，才能正确设置！");
                     xRan.Validation.Delete();
@@ -436,6 +480,29 @@ namespace sqlitemodel
                     //   Excel.XlReferenceStyle.xlA1, System.Type.Missing, System.Type.Missing));
                 }
             }
-        }        
+        }
+        public void OnMapTypeDeleted(string sMapTypeName)
+        {
+            //  移除映射类型信息
+            if (!m_DicMapType.ContainsKey(sMapTypeName))
+            {
+                return;
+            }
+            m_DicMapType.Remove(sMapTypeName);
+
+            //  移除Valid信息
+            foreach (KeyValuePair<string, _Map_Col_Info> keyValues in m_MapToMapInfo)
+            {
+                string sColName = keyValues.Key;
+                if (keyValues.Value.sMapTypeName == sMapTypeName)
+                {
+                    Excel.Range xRan;
+                    xRan = this.Range[sColName + Convert.ToString(7), sColName + Convert.ToString(this.list1.ListRows.Count + 7)];
+
+                    MessageBox.Show("解决0x800A03EC错误，目前没有找到可以退出编辑模式的方法，只能出这个提示框，才能正确设置！");
+                    xRan.Validation.Delete();
+                }
+            }
+        }
     }
 }

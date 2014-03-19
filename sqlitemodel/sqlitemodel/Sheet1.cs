@@ -1,4 +1,30 @@
-﻿using System;
+﻿/*
+The MIT License (MIT)
+
+Copyright (c) <2013-2020> <wenshengming zhujiangping>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+.
+*/
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -931,6 +957,26 @@ namespace sqlitemodel
                     sqCommand.ExecuteNonQuery();
                 }
                 MessageBox.Show("数据发布成功!!!  数据库位置为" + fName, "发布成功！", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+        public void OnMapTypeDeleted(string sMapTypeName)
+        {
+            this.dgvAvailableMapType.Rows.Clear();
+            SQLiteCommand sqliteCommand = this.connection.CreateCommand();
+            sqliteCommand.CommandText = "select maptype from mapdefine group by maptype";
+            SQLiteDataReader smapreader = sqliteCommand.ExecuteReader();
+            if (smapreader.HasRows)
+            {
+                while (smapreader.Read())
+                {
+                    string sName = smapreader.GetString(0);
+
+                    DataGridViewRow dr = new DataGridViewRow();
+                    dr.CreateCells(dgvAvailableMapType);
+                    dr.Cells[0].Value = sName;
+
+                    this.dgvAvailableMapType.Rows.Add(dr);
+                }
             }
         }
     }

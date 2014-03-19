@@ -1,4 +1,30 @@
-﻿using System;
+﻿/*
+The MIT License (MIT)
+
+Copyright (c) <2013-2020> <wenshengming zhujiangping>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+.
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -35,6 +61,7 @@ namespace sqlitemodel
             this.btnSaveToDB.Click += new System.EventHandler(this.btnSaveToDB_Click);
             this.btnGetFromDB.Click += new System.EventHandler(this.btnGetFromDB_Click);
             this.btnBeginCreate.Click += new System.EventHandler(this.btnBeginCreate_Click);
+            this.btndelmaptype.Click += new System.EventHandler(this.btndelmaptype_Click);
             this.Startup += new System.EventHandler(this.Sheet2_Startup);
             this.Shutdown += new System.EventHandler(this.Sheet2_Shutdown);
 
@@ -245,6 +272,44 @@ namespace sqlitemodel
                 }
                 //MessageBox.Show("可用映射已经装载成功", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        private void btndelmaptype_Click(object sender, EventArgs e)
+        {
+            if (Globals.Sheet1.connection == null)
+            {
+                return;
+            }
+            if (Globals.Sheet1.connection.State != ConnectionState.Open)
+            {
+                return;
+            }
+            if (this.cboMapType.Text == "")
+            {
+                MessageBox.Show("请在下拉列表框选择映射类型！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            string sMapTypeNameToDelete = this.cboMapType.Text;
+            if (MessageBox.Show("确定要删除映射类型？！", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+            {
+                return;
+            }
+            SQLiteCommand sqCommand = Globals.Sheet1.connection.CreateCommand();
+            sqCommand.CommandText = "delete from mapdefine where maptype='" + this.cboMapType.Text + "'";
+            sqCommand.ExecuteNonQuery();
+
+            //  更新表数据库中使用的映射类型
+            sqCommand.CommandText = "update tabledefine set dbmaptype='' where dbmaptype='" + sMapTypeNameToDelete + "'";
+            sqCommand.ExecuteNonQuery();
+
+            this.cboMapType.Items.Remove(sMapTypeNameToDelete);
+
+            //  更新sheet1可获取映射类型
+            Globals.Sheet1.OnMapTypeDeleted(sMapTypeNameToDelete);
+            //  更新sheet3映射类型信息
+            Globals.Sheet3.OnMapTypeDeleted(sMapTypeNameToDelete);
+
+            MessageBox.Show("删除成功！！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
